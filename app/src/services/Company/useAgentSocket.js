@@ -166,20 +166,45 @@ export function useAgentSocket({ token, codeUser, fullName }) {
   
   const handleWorkerMessage = (data) => {
     if (!data || typeof data !== 'object') return
-    if (!data.url) return
 
-    console.log('Documento listo:', data.url)
+    // 🔄 actualizar progreso
+    if (data.estado) {
+      updateStepsFromSocket(data.estado)
+    }
 
-    const createdAt = new Date(data.created_at.replace(' ', 'T'))
+    // 📄 documento listo
+    if (data.url) {
+      documentUrl.value = data.url
+      mostrarDocumento.value = true
+      isProcessing.value = false
 
-    documentUrl.value = data.url
-    mostrarDocumento.value = true
-    isProcessing.value = false
-    documentoExpirado.value = false
-
-    startExpirationCountdown(createdAt, data.tiempo_expiracion)
+      const createdAt = new Date(data.created_at.replace(' ', 'T'))
+      startExpirationCountdown(createdAt, data.tiempo_expiracion)
+    }
   }
 
+  const updateStepsFromSocket = (estado) => {
+    if (!Array.isArray(estado)) return
+
+    steps.value.forEach(step => {
+      const backendStep = estado.find(e => e.nombre === step.key)
+
+      if (!backendStep) {
+        step.status = 'pending'
+      } else if (backendStep.status === 'done') {
+        step.status = 'done'
+      } else {
+        step.status = 'active'
+      }
+    })
+  }
+
+  const steps = ref([
+    { id: 1, key: 'Generando prompt', status: 'pending' },
+    { id: 2, key: 'Generando documentación en Gemini', status: 'pending' },
+    { id: 3, key: 'Generando word de la documentación', status: 'pending' },
+    { id: 4, key: 'Generando url temporal en R2', status: 'pending' }
+  ])
 
   onMounted(connect)
   onMounted(connectSocketWorker)
@@ -211,5 +236,7 @@ export function useAgentSocket({ token, codeUser, fullName }) {
     handleWorkerMessage,
     tiempoRestante,
     documentoExpirado,
+    updateStepsFromSocket,
+    steps
   }
 }

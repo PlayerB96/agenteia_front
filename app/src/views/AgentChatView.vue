@@ -127,7 +127,7 @@
                           'text-green-400': step.status === 'done'
                         }"
                       >
-                        {{ step.label }}
+                        {{ step.key }}
                       </span>
                     </li>
                   </ul>
@@ -258,7 +258,7 @@
                     'text-green-400': step.status === 'done'
                   }"
                 >
-                  {{ step.label }}
+                  {{ step.key }}
                 </span>
               </li>
             </ul>
@@ -360,7 +360,9 @@ const {
   documentUrl,
   mostrarDocumento,
   tiempoRestante,
-  documentoExpirado
+  documentoExpirado,
+  updateStepsFromSocket,
+  steps
 } = useAgentSocket({
   token: 'secret123',
   codeUser: 'USER001',
@@ -390,14 +392,6 @@ const activeChatId = ref(null)
 
 const lastChats = computed(() => history.value.slice(-5))
 
-const steps = ref([
-  { id: 1, label: 'Recibiendo mensaje', status: 'pending' },
-  { id: 2, label: 'Analizando intención', status: 'pending' },
-  { id: 3, label: 'Procesando información', status: 'pending' },
-  { id: 4, label: 'Generando respuesta', status: 'pending' },
-  { id: 5, label: 'Respuesta enviada', status: 'pending' }
-])
-
 
 const maximized = ref(false)
 const showOptions = ref(true)
@@ -423,7 +417,7 @@ watch(
     document.body.style.overflowX = maximizedVal ? 'hidden' : 'auto'
 
 
-    if (isProcessingVal) {
+    /*if (isProcessingVal) {
       currentStep.value = 0
 
       setTimeout(() => {
@@ -456,7 +450,7 @@ watch(
         steps.value.forEach(s => s.status = 'pending')
         currentStep.value = 0
       }, 5000)
-    }
+    }*/
 
     newMessages.forEach(msg => {
       history.value.push(msg)
