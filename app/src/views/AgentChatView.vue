@@ -1,49 +1,47 @@
-<style scoped>
-.chat-enter-active {
-  transition: all 0.5s ease-out;
-}
-.chat-enter-from {
-  opacity: 0;
-  transform: translateY(8px);
-}
-.chat-leave-active {
-  transition: all 0.3s ease-out;
-}
-.chat-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-</style>
+
 <template>
-  <div class="flex min-h-screen font-display bg-agent-bg text-agent-text">
+  <div class="h-screen flex flex-col overflow-hidden font-display bg-agent-bg text-agent-text">
+    <Navbar
+      :title="agentName && agentName !== 'chat' ? `Chat con ${agentName.replace(/_/g, ' ')}` : 'Chat con Agente'"
+      description="Conversa con tus agentes IA"
+    >
+      <template #leading>
+        <button
+          @click="toggleMobileMenu"
+          class="lg:hidden p-2.5 bg-agent-surface-elevated border border-agent-border rounded-lg text-agent-text hover:bg-agent-border/50"
+        >
+          <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
+          <X v-else class="w-6 h-6" />
+        </button>
+      </template>
+    </Navbar>
 
-    <!-- Mobile Menu Button -->
-    <button @click="toggleMobileMenu"
-      class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-agent-surface border border-agent-border rounded-lg text-agent-text hover:bg-agent-surface-elevated transition-colors">
-      <span v-if="!mobileMenuOpen">☰</span>
-      <span v-else>✕</span>
-    </button>
+    <div
+      v-if="mobileMenuOpen"
+      class="lg:hidden fixed inset-0 bg-black/50 z-30"
+      @click="mobileMenuOpen = false"
+    />
 
-    <!-- Mobile Overlay -->
-    <div v-if="mobileMenuOpen" class="lg:hidden fixed inset-0 bg-black/50 z-30" @click="mobileMenuOpen = false" />
+    <div class="flex flex-1 min-h-0">
+      <CompanySidebar
+        v-if="!maximized"
+        :current-view="currentView"
+        :mobile-open="mobileMenuOpen"
+        :current-subtab="currentSubtab"
+        @update:current-view="currentView = $event; mobileMenuOpen = false"
+        @update:current-subtab="currentSubtab = $event"
+      />
 
-    <!-- Sidebar -->
-    <CompanySidebar v-if="!maximized" :current-view="currentView" :mobile-open="mobileMenuOpen"
-      :current-subtab="currentSubtab" @update:current-view="currentView = $event; mobileMenuOpen = false"
-      @update:current-subtab="currentSubtab = $event" />
-
-
-    <!-- Main -->
-    <main :class="[
-      maximized ? 'lg:p-0 pt-16' : 'flex-1 p-0 md:p-4 lg:p-6 overflow-y-auto pt-16 lg:pt-8'
-    ]">
-      <AgentHeader v-if="!maximized" />
+      <!-- Main -->
+      <main :class="[
+        maximized ? 'flex-1 p-0 overflow-hidden' : 'flex-1 flex flex-col min-h-0 min-w-0 overflow-hidden p-2 md:p-4'
+      ]">
 
       <!-- Selector agente -->
-      <div class="mb-4">
+      <div class="shrink-0 mb-2">
         <template v-if="agentName && agentName !== 'chat'">
-          <span class="inline-flex items-center gap-2 bg-agent-surface border border-agent-border text-agent-text px-4 py-2.5 rounded-lg font-semibold">
-            <span class="w-2 h-2 rounded-full" :class="connected ? 'bg-agent-500' : 'bg-red-500'" />
+          <span class="inline-flex items-center gap-1.5 bg-agent-surface border border-agent-border text-agent-text px-3 py-1.5 rounded-lg text-sm font-medium">
+            <span class="w-1.5 h-1.5 rounded-full" :class="connected ? 'bg-agent-500' : 'bg-red-500'" />
             {{ agentName.replace(/_/g, ' ') }}
           </span>
         </template>
@@ -57,43 +55,51 @@
               </option>
             </select>
             <button @click="goToAgentChat"
-              class="px-4 py-2 bg-agent-500 text-white rounded-lg hover:bg-agent-600 font-semibold transition-colors">
+              class="px-4 py-2 bg-agent-500 text-white rounded-lg hover:bg-agent-600 font-semibold">
               Ir al chat
             </button>
           </div>
         </template>
       </div>
 
-      <!-- Chat + Aside -->
-      <main v-if="agentName && agentName !== 'chat'" class="flex-1 min-h-0 flex flex-col md:flex-row gap-6">
+      <!-- Chat + Aside - altura fija adaptativa (flex-1 = ocupa todo el espacio disponible) -->
+      <main v-if="agentName && agentName !== 'chat'" class="flex-1 min-h-0 flex flex-col md:flex-row gap-3 overflow-hidden">
         <!-- Chat -->
-        <section class="flex-1 min-h-0 flex">
+        <section class="flex-1 min-h-0 flex flex-col">
           <div ref="chatContainer" :class="[
-            'relative flex flex-col bg-agent-surface border border-agent-border',
+            'relative flex flex-col bg-agent-surface border border-agent-border flex-1 min-h-0',
             maximized
               ? 'fixed inset-0 z-[9999] rounded-none w-screen h-screen'
-              : 'w-full max-w mx-auto rounded-xl p-0 md:p-4'
+              : 'w-full rounded-lg p-2 md:p-3'
           ]" :style="maximized ? { width: '99vw', height: '99vh' } : {}"
           >
+            <!-- Botones superiores: Nuevo Chat + Maximizar -->
+            <div class="absolute top-2 right-2 z-20 flex items-center gap-1">
+              <button
+                @click="clearHistory"
+                title="Nuevo chat"
+                class="p-1.5 rounded-md bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text">
+                <Plus class="w-4 h-4" />
+              </button>
+              <button
+                @click="toggleMaximize"
+                :title="maximized ? 'Restaurar' : 'Ampliar'"
+                class="p-1.5 rounded-md bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text">
+                <component :is="maximized ? Minimize : Maximize2" class="w-4 h-4" />
+              </button>
+            </div>
 
-
-            <!-- Botón Maximizar -->
-            <button @click="toggleMaximize"
-              class="absolute top-3 right-3 z-20 p-2 rounded-lg bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text transition-colors">
-              <component :is="maximized ? Minimize : Maximize2" class="w-5 h-5" />
-            </button>
-
-            <!-- Opciones superiores -->
-            <div v-if="maximized" class="bg-agent-bg border border-agent-border rounded-xl">
+            <!-- Opciones superiores (modo maximizado) -->
+            <div v-if="maximized" class="bg-agent-bg border border-agent-border rounded-lg">
               <button @click="showOptions = !showOptions"
-                class="w-full flex items-center justify-between px-4 py-3 font-semibold text-agent-text hover:bg-agent-surface transition-colors rounded-xl">
+                class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-agent-text hover:bg-agent-surface rounded-lg">
                 Opciones de {{ agentName.replace(/_/g, ' ') }}
                 <span>{{ showOptions ? '▲' : '▼' }}</span>
               </button>
 
-              <div v-if="showOptions" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div v-if="showOptions" class="p-3 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h3 class="font-semibold mb-2">Últimos mensajes</h3>
+                  <h3 class="text-xs font-semibold mb-1.5">Últimos mensajes</h3>
                   <ul class="max-h-32 overflow-y-auto space-y-1 text-xs scrollbar-ag">
                     <li v-for="(msg, i) in lastChats" :key="i" class="flex gap-1">
                       <component :is="msg.role === 'user' ? User : Bot" class="w-3 h-3" />
@@ -104,7 +110,7 @@
                 </div>
 
                 <div>
-                  <h3 class="font-semibold mb-2">Pasos</h3>
+                  <h3 class="text-xs font-semibold mb-1.5">Pasos</h3>
                   <ul class="text-xs space-y-2">
                     <li v-for="(step, i) in steps" :key="i" class="flex inline-center gap-2">
                       <component
@@ -131,13 +137,9 @@
               </div>
             </div>
 
-            <!-- Mensajes -->
-            <div ref="messagesContainer" class="flex-1 overflow-y-auto p-4 rounded-xl bg-agent-bg/50 scrollbar-ag max-w-[100%] max-h-[70vh]">
-              <TransitionGroup
-                name="chat"
-                tag="div"
-                class="flex flex-col gap-1"
-              >
+            <!-- Mensajes - altura fija para maximizar espacio -->
+            <div ref="messagesContainer" class="flex-1 min-h-0 overflow-y-auto p-2 md:p-3 rounded-lg bg-agent-bg/30 scrollbar-ag">
+              <div class="flex flex-col gap-0.5">
                 <ChatMessage
                   v-for="(msg, i) in history"
                   :key="i"
@@ -145,10 +147,10 @@
                   :messageError="messageError"
                   :isDocumentationMode="isDocumentationMode"
                 />
-              </TransitionGroup>
-              <div v-if="isProcessing" class="flex items-center gap-2 text-sm text-agent-text-muted px-2 mt-2">
-                <Bot class="w-4 h-4 animate-pulse" />
-                <span>El agente está escribiendo…</span>
+              </div>
+              <div v-if="isProcessing" class="flex items-center gap-1.5 text-xs text-agent-text-muted px-2 mt-1">
+                <Bot class="w-3.5 h-3.5 animate-pulse" />
+                <span>Escribiendo…</span>
               </div>
             </div>
             <!-- Acciones rápidas -->
@@ -161,14 +163,12 @@
               :showExecuteButton="showExecuteButton"
               @executeButton="runAction"
             />
-            <!-- Input -->
-            <form @submit.prevent="sendMessage" class="flex flex-col gap-3 mt-1">
+            <!-- Input estilo Cursor: compacto, en línea -->
+            <form @submit.prevent="sendMessage" class="flex flex-col gap-2 mt-2 shrink-0">
               <!-- Inputs dinámicos -->
-              <TransitionGroup
-                name="chat"
-                tag="div"
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+              <div
                 v-if="showParamForm"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
               >
                 <div
                   v-for="(value, key) in actionInputs"
@@ -176,9 +176,9 @@
                 >
                   <div 
                   v-if="selectedAction && key != 'id_action'"
-                  class="flex flex-col"
+                  class="flex flex-col gap-1"
                   >
-                    <label :for="key" class="text-sm text-agent-text-muted font-medium">
+                    <label :for="key" class="text-xs text-agent-text-muted font-medium">
                       {{ key }}
                     </label>
                     <input
@@ -186,45 +186,40 @@
                       v-model="actionInputs[key]"
                       :readonly="isDocumentationMode"
                       type="text"
-                      class="bg-agent-surface-elevated border border-agent-border rounded-lg px-3 py-2 text-agent-text placeholder:text-agent-text-muted focus:outline-none focus:ring-2 focus:ring-agent-500/50"
+                      class="bg-agent-surface-elevated border border-agent-border rounded-lg px-3 py-2 text-sm text-agent-text placeholder:text-agent-text-muted focus:outline-none focus:ring-1 focus:ring-agent-500/50"
                     />
                   </div>
                 </div>
-              </TransitionGroup>
-              <!-- Input normal -->
-              
-              <div v-if="showChat" class="flex flex-col gap-2">
+              </div>
+              <!-- Input principal estilo Cursor -->
+              <div v-if="showChat" class="flex items-center gap-2 bg-agent-surface-elevated border border-agent-border rounded-lg px-3 py-2 focus-within:ring-1 focus-within:ring-agent-500/50 focus-within:border-agent-500/40">
                 <input
                   v-model="input"
-                  placeholder="Escribe tu mensaje…"
+                  placeholder="Mensaje…"
                   :disabled="isProcessing || selectedAction"
-                  class="w-full bg-agent-surface-elevated border border-agent-border rounded-xl px-4 py-3 text-agent-text placeholder:text-agent-text-muted focus:outline-none focus:ring-2 focus:ring-agent-500/50 transition-shadow"
+                  class="flex-1 min-w-0 bg-transparent text-sm text-agent-text placeholder:text-agent-text-muted focus:outline-none py-1"
                 />
+                <button type="submit" class="shrink-0 p-1.5 rounded-md bg-agent-500 hover:bg-agent-600 text-white">
+                  <Send class="w-4 h-4" />
+                </button>
               </div>
 
-              <!-- Botón siempre abajo -->
-              <div class="flex justify-end mb-1">
-                <button type="submit" class="px-4 py-2.5 bg-agent-500 text-white rounded-xl flex items-center gap-2 font-semibold hover:bg-agent-600 transition-colors">
-                  <Send class="w-4 h-4" />
-                  <span class="hidden sm:inline">Enviar</span>
+              <!-- Botón submit (cuando hay param form) -->
+              <div v-if="showParamForm" class="flex justify-end">
+                <button type="submit" class="px-3 py-1.5 text-sm bg-agent-500 text-white rounded-lg font-medium hover:bg-agent-600">
+                  Enviar
                 </button>
               </div>
             </form>
 
-            <!-- Acciones -->
-            <button @click="clearHistory"
-              class="inline-flex items-center gap-2 px-3 py-2 bg-agent-surface-elevated border border-agent-border rounded-lg text-agent-text-muted hover:text-agent-500 hover:border-agent-500/30 transition-colors font-medium">
-              <MessageCircle class="w-4 h-4 text-indigo-400"/> Nuevo Chat
-            </button>
-
           </div>
         </section>
 
-        <!-- Aside -->
+        <!-- Aside - misma altura que el chat, scroll interno -->
         <aside v-if="!maximized"
-          class="w-full md:w-[420px] bg-agent-surface border border-agent-border rounded-xl p-0 md:p-4 flex flex-col gap-8">
+          class="w-full md:w-[320px] shrink-0 min-h-0 flex flex-col bg-agent-surface border border-agent-border rounded-lg p-3 gap-4 overflow-hidden">
           <div>
-            <h2 class="font-bold mb-4 text-agent-text">Opciones de {{ agentName.replace(/_/g, ' ') }}</h2>
+            <h2 class="text-sm font-semibold mb-2 text-agent-text">Opciones de {{ agentName.replace(/_/g, ' ') }}</h2>
             <ul class="max-h-32 overflow-y-auto space-y-1 text-xs scrollbar-ag">
               <li v-for="(msg, i) in lastChats" :key="i" class="flex gap-1">
                 <component :is="msg.role === 'user' ? User : Bot" class="w-3 h-3" />
@@ -235,7 +230,7 @@
           </div>
 
           <div>
-            <h3 class="font-semibold mb-2">Pasos</h3>
+            <h3 class="text-xs font-semibold mb-1.5 text-agent-text-muted">Pasos</h3>
             <ul class="text-xs space-y-2">
               <li v-for="step in steps" :key="step.id" class="flex items-center gap-2">
                 <component
@@ -259,19 +254,19 @@
               </li>
             </ul>
           </div>
-          <div v-if="mostrarDocumento" class="mt-2">
-            <small v-if="!documentoExpirado" class="flex items-center justify-center mb-2 font-semibold">
-              <Timer /> Disponible por: {{ tiempoRestante }}
+          <div v-if="mostrarDocumento" class="mt-1">
+            <small v-if="!documentoExpirado" class="flex items-center justify-center mb-1.5 text-xs font-medium">
+              <Timer class="w-3 h-3 inline mr-0.5" /> {{ tiempoRestante }}
             </small>
 
             <a
               v-if="!documentoExpirado"
               :href="documentUrl"
               target="_blank"
-              class="flex items-center justify-center px-4 py-2.5 bg-agent-500 text-white rounded-lg font-semibold hover:bg-agent-600 transition-colors"
+              class="flex items-center justify-center gap-1.5 px-3 py-2 text-sm bg-agent-500 text-white rounded-lg font-medium hover:bg-agent-600"
             >
-              <Download class="w-4 h-4 mr-2" />
-              Descargar documento
+              <Download class="w-3.5 h-3.5" />
+              Descargar
             </a>
 
             <small v-else class="text-red-600 block">
@@ -279,23 +274,23 @@
             </small>
           </div>
           <!-- Chats recientes -->
-          <div class="flex-1">
-            <h3 class="font-semibold mb-2">Chats recientes</h3>
+          <div class="flex-1 min-h-0 overflow-y-auto scrollbar-ag">
+            <h3 class="text-xs font-semibold mb-1.5 text-agent-text-muted">Chats recientes</h3>
 
-            <ul class="space-y-2 text-sm">
+            <ul class="space-y-1 text-xs">
               <li
                 v-for="chat in chatHistory"
                 :key="chat.id"
                 @click="loadChat(chat)"
-                class="cursor-pointer p-3 rounded-xl border transition-colors"
+                class="cursor-pointer p-2 rounded-lg border"
                 :class="[
                   chat.id === activeChatId
                     ? 'bg-agent-500/15 border-agent-500/40 text-agent-text'
                     : 'bg-agent-surface-elevated border-agent-border hover:border-agent-500/30 text-agent-text'
                 ]"
               >
-                <p class="font-medium truncate">{{ chat.title }}</p>
-                <p class="text-xs text-agent-text-muted flex items-center gap-1">
+                <p class="font-medium truncate text-agent-text">{{ chat.title }}</p>
+                <p class="text-[10px] text-agent-text-muted flex items-center gap-0.5 mt-0.5">
                   <MessageCircle class="w-3 h-3 text-agent-500" />
                   {{ new Date(chat.createdAt).toLocaleTimeString() }}
                 </p>
@@ -305,19 +300,20 @@
         </aside>
 
       </main>
-    </main>
+      </main>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
-import AgentHeader from '../components/AgentHeader.vue'
+import { useRoute, useRouter } from 'vue-router'
+import Navbar from '../components/Navbar.vue'
 import CompanySidebar from '../components/CompanySidebar.vue'
 import ChatMessage from '../components/ChatMessage.vue'
 import QuickActions from '../components/QuickActions.vue'
 import ExecutedActions from '../components/ExecutedActions.vue'
-import { Bot, User, Send, Maximize2, Minimize, MessageCircle, Timer, Download } from 'lucide-vue-next'
+import { Bot, User, Send, Maximize2, Minimize, Plus, MessageCircle, Timer, Download, Menu, X } from 'lucide-vue-next'
 import { mockAgents } from '../data/mockAgents.js'
 import { useAgentSocket } from '../services/Company/useAgentSocket.js'
 import { MockAgentSocket } from '../services/Company/agentSocket.mock.js'
@@ -372,6 +368,7 @@ const stepIcon = (status) => {
 }
 
 const route = useRoute()
+const router = useRouter()
 const agentName = route.params.agentName
 
 const agents = ref(mockAgents)
@@ -609,7 +606,7 @@ function clearHistory() {
 function goToAgentChat() {
   if (!selectedAgent.value) return
   const agentParam = selectedAgent.value.replace(/\s+/g, '_')
-  window.location.href = `/company/${agentParam}`
+  router.push(`/company/${encodeURIComponent(agentParam)}`)
 }
 
 async function runQuickAction(action) {

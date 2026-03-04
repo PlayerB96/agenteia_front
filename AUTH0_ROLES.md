@@ -42,6 +42,26 @@ exports.onExecutePostLogin = async (event, api) => {
 };
 ```
 
+### Usar la descripción del rol desde Auth0 (opcional)
+
+La app lee la descripción del rol de Auth0. Puedes enviarla de dos formas:
+
+**Opción A – Objeto con `name` y `description`:** en tu Action, envía el rol como objeto (por ejemplo, obteniendo los datos con la Management API):
+
+```javascript
+api.idToken.setCustomClaim(`${namespace}/role`, {
+  name: roleName,
+  description: roleDescription  // la descripción que configuraste en Auth0
+});
+```
+
+**Opción B – Claim separado:** envía el nombre como siempre y añade un claim para la descripción:
+
+```javascript
+api.idToken.setCustomClaim(`${namespace}/role`, roleName);
+api.idToken.setCustomClaim(`${namespace}/role_description`, roleDescription);
+```
+
 ## Paso 3: Desplegar
 
 1. Click en **Deploy** (arriba a la derecha en el editor de código).

@@ -133,13 +133,11 @@ router.beforeEach(async (to, from, next) => {
       }
       
       if (!hasRole(to.meta.role)) {
-        // Instead of alerting, just redirect based on their actual role to avoid getting stuck
-        if (userRole.value === 'saas_owner') return next('/admin')
-        if (userRole.value === 'company_admin') return next('/company')
-        if (userRole.value === 'new_user') return next('/onboarding')
-        
-        // Fallback
-        return next('/login')
+        // Sin rol = new_user; redirigir según el rol actual
+        const role = userRole.value || 'new_user'
+        if (role === 'saas_owner') return next('/admin')
+        if (role === 'company_admin') return next('/company')
+        return next('/onboarding')
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
-  <div v-if="showExecuteButton" class="flex flex-wrap justify-center gap-2 mb-1">
+  <div v-if="showExecuteButton" class="flex flex-wrap justify-center gap-1.5 mb-0.5">
     <button
       @click="$emit('executeButton')"
-      class="px-4 py-2.5 rounded-lg bg-agent-500 hover:bg-agent-600 text-white font-semibold transition-colors"
+      class="px-3 py-1.5 rounded-md text-xs font-semibold bg-agent-500 hover:bg-agent-600 text-white"
     >
       DOCUMENTAR
     </button>

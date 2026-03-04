@@ -2,32 +2,8 @@
   {
     "id": 1,
     "email": "admin@agenteia.com",
-    "password": "admin123",
+    "password": "admin123$$sa",
     "name": "Admin Agenteia",
-    "role": "saas_owner"
-  },
-  {
-    "id": 2,
-    "email": "admin@techsolutions.com",
-    "password": "tech123",
-    "name": "John Doe",
-    "role": "company_admin",
-    "companyId": 1
-  },
-  {
-    "id": 3,
-    "email": "admin@globalmarketing.io",
-    "password": "global123",
-    "name": "Jane Smith",
-    "role": "company_admin",
-    "companyId": 2
-  },
-  {
-    "id": 4,
-    "email": "admin@ecommerceplus.com",
-    "password": "ecom123",
-    "name": "Mike Johnson",
-    "role": "company_admin",
-    "companyId": 3
+    "role": "company_admin"
   }
 ]

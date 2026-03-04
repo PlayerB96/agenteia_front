@@ -38,12 +38,12 @@ const updateFeature = (featureKey, field, value) => {
 </script>
 
 <template>
-  <div class="bg-700 border border-700 rounded-xl overflow-hidden mb-4">
+  <div class="bg-agent-surface-elevated border border-agent-border rounded-xl overflow-hidden mb-4">
     <!-- Header -->
-    <div class="p-4 flex justify-between items-center bg-700">
-      <div class="flex items-center gap-3 flex-1 cursor-pointer text-600" @click="toggleExpand">
-        <component :is="isExpanded ? ChevronDown : ChevronRight" class="w-4 h-4 text-200 transition-transform" />
-        <h4 class="font-medium text-sm md:text-base text-200">{{ title }}</h4>
+    <div class="p-4 flex justify-between items-center bg-agent-surface-elevated">
+      <div class="flex items-center gap-3 flex-1 cursor-pointer" @click="toggleExpand">
+        <component :is="isExpanded ? ChevronDown : ChevronRight" class="w-4 h-4 text-agent-text transition-transform" />
+        <h4 class="font-medium text-sm md:text-base text-agent-text">{{ title }}</h4>
       </div>
       
       <label class="relative inline-flex items-center cursor-pointer ml-4">
@@ -53,14 +53,14 @@ const updateFeature = (featureKey, field, value) => {
           @change="toggleEnabled"
           class="sr-only peer"
         >
-        <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+        <div class="w-11 h-6 bg-agent-border peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-agent-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-agent-500"></div>
       </label>
     </div>
 
     <!-- Content -->
     <div 
       v-if="isExpanded && enabled"
-      class="p-4 md:p-6 border-t border-slate-700 bg-800 space-y-4"
+      class="p-4 md:p-6 border-t border-agent-border bg-agent-surface space-y-4"
     >
       <slot :updateFeature="updateFeature" :features="features"></slot>
     </div>

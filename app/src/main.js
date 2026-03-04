@@ -6,8 +6,12 @@ import router from './router'
 
 import CompanySidebar from './components/CompanySidebar.vue'
 import './assets/tailwind.css'
+import { APP_VERSION } from './config/app.js'
 
 const app = createApp(App)
+
+// Versión de la app (footer, etc.)
+app.provide('appVersion', APP_VERSION)
 
 // Registrar CompanySidebar globalmente
 app.component('CompanySidebar', CompanySidebar)

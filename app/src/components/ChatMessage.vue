@@ -1,13 +1,12 @@
 <template>
-  <div class="mb-3 flex" :class="isUser ? 'justify-end' : 'justify-start'">
-    <div class="flex items-end gap-2 min-w-0 max-w-[85%] sm:max-w-[75%]" :class="msg.role === 'user' && 'flex-row-reverse'">
-      <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" :class="isUser ? 'bg-agent-500/20' : 'bg-agent-surface-elevated border border-agent-border'">
-        <component :is="msg.role === 'user' ? User : Bot" class="w-4 h-4" :class="isUser ? 'text-agent-500' : 'text-agent-text-muted'" />
+  <div class="mb-1.5 flex" :class="isUser ? 'justify-end' : 'justify-start'">
+    <div class="flex items-end gap-1.5 min-w-0 max-w-[90%] sm:max-w-[80%]" :class="msg.role === 'user' && 'flex-row-reverse'">
+      <div class="shrink-0 w-6 h-6 rounded-md flex items-center justify-center" :class="isUser ? 'bg-agent-500/20' : 'bg-agent-surface-elevated border border-agent-border'">
+        <component :is="msg.role === 'user' ? User : Bot" class="w-3 h-3" :class="isUser ? 'text-agent-500' : 'text-agent-text-muted'" />
       </div>
       <span
-        class="px-4 py-2.5 rounded-xl text-sm font-medium
-          break-words whitespace-pre-wrap leading-relaxed
-          transition-colors"
+        class="px-3 py-1.5 rounded-lg text-xs font-medium
+          break-words whitespace-pre-wrap leading-relaxed"
         :class="bubbleClass"
       >
         {{ msg.text }}

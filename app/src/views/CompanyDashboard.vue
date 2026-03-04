@@ -1,19 +1,14 @@
 <script setup>
 import { ref, computed } from "vue";
-import { Menu, X, LogOut, Users, Settings, MoonStar, Sun } from "lucide-vue-next";
-import { useAuth } from "../utils/useAuth";
+import { Menu, X, Users, Settings } from "lucide-vue-next";
 import AgentConfig from "../components/AgentConfig.vue";
 import CompanyStats from "../components/CompanyStats.vue";
+import Navbar from "../components/Navbar.vue";
 import { mockAgents } from "../data/mockAgents.js";
-import { inject } from 'vue'
-
-const { user, logout } = useAuth();
 const currentView = ref("agents");
 const currentSubtab = ref("chat-agente");
 const mobileMenuOpen = ref(false);
 const agents = ref(mockAgents);
-const theme = inject('theme')
-const toggleTheme = inject('toggleTheme')
 
 const stats = computed(() => ({
   totalAgents: agents.value.length,
@@ -25,21 +20,24 @@ const stats = computed(() => ({
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
-
-const handleLogout = () => {
-  logout();
-};
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-agent-bg text-agent-text font-display">
-    <button
-      @click="toggleMobileMenu"
-      class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-agent-surface border border-agent-border rounded-lg text-agent-text hover:bg-agent-surface-elevated transition-colors"
+  <div class="h-screen flex flex-col overflow-hidden bg-agent-bg text-agent-text font-display">
+    <Navbar
+      title="Centro de Control"
+      description="Gestiona tus agentes IA y configuraciones"
     >
-      <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
-      <X v-else class="w-6 h-6" />
-    </button>
+      <template #leading>
+        <button
+          @click="toggleMobileMenu"
+          class="lg:hidden p-2.5 bg-agent-surface-elevated border border-agent-border rounded-lg text-agent-text hover:bg-agent-border/50 transition-colors"
+        >
+          <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
+          <X v-else class="w-6 h-6" />
+        </button>
+      </template>
+    </Navbar>
 
     <div
       v-if="mobileMenuOpen"
@@ -47,49 +45,19 @@ const handleLogout = () => {
       @click="mobileMenuOpen = false"
     />
 
-    <CompanySidebar
-      :current-view="currentView"
-      :mobile-open="mobileMenuOpen"
-      :current-subtab="currentSubtab"
-      @update:current-view="currentView = $event; mobileMenuOpen = false"
-      @update:current-subtab="currentSubtab = $event"
-    />
+    <div class="flex flex-1 min-h-0">
+      <CompanySidebar
+        :current-view="currentView"
+        :mobile-open="mobileMenuOpen"
+        :current-subtab="currentSubtab"
+        @update:current-view="currentView = $event; mobileMenuOpen = false"
+        @update:current-subtab="currentSubtab = $event"
+      />
 
-    <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto pt-16 lg:pt-8">
-      <header class="mb-6 md:mb-8 flex flex-wrap justify-between items-start gap-4">
-        <div>
-          <h1 class="text-2xl md:text-3xl font-bold text-agent-text mb-2 tracking-tight">
-            Centro de Control
-          </h1>
-          <p class="text-agent-text-muted text-sm md:text-base">
-            Gestiona tus agentes IA y configuraciones
-          </p>
-          <p v-if="user" class="text-agent-text-muted/80 text-xs mt-1 font-mono">
-            {{ user.name || user.email }}
-          </p>
-        </div>
-        <div class="flex items-center gap-2 self-center">
-          <button
-            @click="toggleTheme"
-            class="p-2.5 rounded-lg transition-colors bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text border border-agent-border"
-            title="Cambiar tema"
-          >
-            <MoonStar v-if="theme === 'dark'" class="w-5 h-5" />
-            <Sun v-else class="w-5 h-5" />
-          </button>
-          <button
-            @click="handleLogout"
-            class="flex items-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm font-medium"
-          >
-            <LogOut class="w-4 h-4" />
-            <span class="hidden sm:inline">Cerrar sesión</span>
-          </button>
-        </div>
-      </header>
+      <main class="flex-1 overflow-y-auto min-w-0 p-4 md:p-6 lg:p-8">
+        <CompanyStats :stats="stats" />
 
-      <CompanyStats :stats="stats" />
-
-      <div class="mt-8">
+        <div class="mt-8">
         <AgentConfig v-if="currentView === 'agents'" :agents="agents" />
 
         <div
@@ -118,6 +86,7 @@ const handleLogout = () => {
           </p>
         </div>
       </div>
-    </main>
+      </main>
+    </div>
   </div>
 </template>

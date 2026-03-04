@@ -288,7 +288,7 @@ const statsAgent = computed(() => {
 </script>
 
 <template>
-  <div class="relative bg-800 border border-slate-700 rounded-xl p-6">
+  <div class="relative bg-agent-surface border border-agent-border rounded-xl p-6">
     <div class="flex flex-col h-full">
       <!-- OVERLAY DE LOADING -->
       <div
@@ -296,9 +296,9 @@ const statsAgent = computed(() => {
         class="absolute inset-0 bg-black/60 backdrop-blur-sm
               z-50 flex flex-col items-center justify-center gap-4"
       >
-        <Loader class="h-10 w-10 text-indigo-400 animate-spin" />
+        <Loader class="h-10 w-10 text-agent-500 animate-spin" />
 
-        <p class="text-sm text-slate-300 font-medium">
+        <p class="text-sm text-agent-text-muted font-medium">
           Guardando empresa…
         </p>
       </div>
@@ -306,16 +306,16 @@ const statsAgent = computed(() => {
       <div class="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
         <!-- Información General -->
         <div class="space-y-3 md:space-y-4">
-          <h3 class="text-base md:text-lg font-semibold text-indigo-400 flex items-center gap-2">
+          <h3 class="text-base md:text-lg font-semibold text-agent-500 flex items-center gap-2">
             <ClipboardList class="w-4 h-4 md:w-5 md:h-5" />
             Información General
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <div class="space-y-1">
-              <label class="text-sm font-medium text-300">Ruc de la Empresa</label>
+              <label class="text-sm font-medium text-agent-text-muted">Ruc de la Empresa</label>
               <input 
                 type="number" 
-                class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-200" 
+                class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" 
                 v-model="modalData.ruc"
                 placeholder="Ej: 1234567890"
                 inputmode="numeric"
@@ -323,46 +323,46 @@ const statsAgent = computed(() => {
               >
             </div>
             <div class="space-y-1">
-              <label class="text-sm font-medium text-300">Razon Social de la Empresa</label>
+              <label class="text-sm font-medium text-agent-text-muted">Razon Social de la Empresa</label>
               <input 
                 type="text" 
-                class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-200" 
+                class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" 
                 v-model="modalData.razonsocial"
                 placeholder="Ej: Tech Solutions Inc."
               >
             </div>
             <div class="space-y-1">
-              <label class="text-sm font-medium text-300">Nombre Comercial de la Empresa</label>
+              <label class="text-sm font-medium text-agent-text-muted">Nombre Comercial de la Empresa</label>
               <input 
                 type="text" 
-                class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-200" 
+                class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" 
                 v-model="modalData.nombre_comercial"
                 placeholder="Ej: Tech Solutions"
               >
             </div>
             <div class="space-y-1">
-              <label class="text-sm font-medium text-300">Actividad Economica de la Empresa</label>
+              <label class="text-sm font-medium text-agent-text-muted">Actividad Economica de la Empresa</label>
               <input 
                 type="text" 
-                class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-200" 
+                class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" 
                 v-model="modalData.actividad_economica"
                 placeholder="Ej: Desarrollo de Software"
               >
             </div>
             <div class="space-y-1">
-              <label class="text-sm font-medium text-300">Representante Legal</label>
+              <label class="text-sm font-medium text-agent-text-muted">Representante Legal</label>
               <input 
                 type="text" 
-                class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-200" 
+                class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" 
                 v-model="modalData.representante_legal"
                 placeholder="Ej: Juan Perez"
               >
             </div>
             <div class="space-y-1">
-              <label class="text-sm font-medium text-300">Tipo de Empresa</label>
+              <label class="text-sm font-medium text-agent-text-muted">Tipo de Empresa</label>
               <input 
                 type="text" 
-                class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-200" 
+                class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" 
                 v-model="modalData.tipo_empresa"
                 placeholder="Ej: S.A."
               >
@@ -372,7 +372,7 @@ const statsAgent = computed(() => {
 
         <!-- Funcionalidades por Categoría -->
         <div class="space-y-3 md:space-y-4">
-          <h3 class="text-base md:text-lg font-semibold text-indigo-400 flex items-center gap-2">
+          <h3 class="text-base md:text-lg font-semibold text-agent-500 flex items-center gap-2">
             <Users class="w-4 h-4 md:w-5 md:h-5" />
             Vista General de Agentes
           </h3>
@@ -381,28 +381,28 @@ const statsAgent = computed(() => {
         
         <!-- Opciones Avanzadas -->
         <div class="space-y-3 md:space-y-4">
-          <h3 class="text-base md:text-lg font-semibold text-indigo-400 flex items-center gap-2">
+          <h3 class="text-base md:text-lg font-semibold text-agent-500 flex items-center gap-2">
             <Brain class="w-4 h-4 md:w-5 md:h-5" />
             Opciones Avanzadas
           </h3>
           <div class="space-y-2">
-            <label class="text-sm font-medium text-300">Max Tokens</label>
-            <input type="number" class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 text-200" v-model="modalData.options.max_tokens" placeholder="maximo tokens">
+            <label class="text-sm font-medium text-agent-text-muted">Max Tokens</label>
+            <input type="number" class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" v-model="modalData.options.max_tokens" placeholder="maximo tokens">
           </div>
           <div class="space-y-2">
-            <label class="text-sm font-medium text-300">Timeout (segundos)</label>
-            <input type="number" class="w-full bg-700 border border-600 rounded-lg px-4 py-2.5 focus:outline-none focus:border-indigo-500 text-200" v-model="modalData.options.timeout" placeholder="timeout">
+            <label class="text-sm font-medium text-agent-text-muted">Timeout (segundos)</label>
+            <input type="number" class="w-full bg-agent-surface-elevated border border-agent-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agent-500 focus:border-transparent text-agent-text" v-model="modalData.options.timeout" placeholder="timeout">
           </div>
-          <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+          <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
             <div class="flex items-center gap-3">
-              <input type="checkbox" class="bg-700" v-model="modalData.options.debug" id="debug">
-              <label for="debug" class="text-sm font-medium text-300 w-full h-full">Modo Debug</label>
+              <input type="checkbox" class="bg-agent-surface-elevated" v-model="modalData.options.debug" id="debug">
+              <label for="debug" class="text-sm font-medium text-agent-text-muted w-full h-full">Modo Debug</label>
             </div>
           </div>
         </div>
         <!-- Acciones -->
          <div class="space-y-3 md:space-y-4">
-          <h3 class="text-base md:text-lg font-semibold text-indigo-400 flex items-center gap-2">
+          <h3 class="text-base md:text-lg font-semibold text-agent-500 flex items-center gap-2">
             <Activity class="w-4 h-4 md:w-5 md:h-5" />
             Acciones
           </h3>
@@ -412,7 +412,7 @@ const statsAgent = computed(() => {
               class="
                 w-full
                 flex items-center justify-center gap-2
-                bg-blue-500 hover:bg-blue-600
+                bg-agent-500 hover:bg-agent-600
                 text-white font-bold
                 py-2.5 rounded-lg
               "
@@ -424,7 +424,7 @@ const statsAgent = computed(() => {
               class="
                 w-full
                 flex items-center justify-center gap-2
-                bg-purple-500 hover:bg-purple-600
+                bg-agent-500/80 hover:bg-agent-500
                 text-white font-bold
                 py-2.5 rounded-lg
               "
@@ -438,7 +438,7 @@ const statsAgent = computed(() => {
               class="
                 w-full
                 flex items-center justify-center gap-2
-                bg-green-500 hover:bg-green-600
+                bg-agent-500 hover:bg-agent-600
                 text-white font-bold
                 py-2.5 rounded-lg
               "
@@ -450,8 +450,7 @@ const statsAgent = computed(() => {
               class="
                 w-full
                 flex items-center justify-center gap-2
-                bg-orange-500 hover:bg-orange-600
-                text-white font-bold
+                bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text border border-agent-border font-bold
                 py-2.5 rounded-lg
               "
             >
@@ -463,44 +462,44 @@ const statsAgent = computed(() => {
         
         <!-- Opciones Avanzadas -->
         <div class="space-y-3 md:space-y-4">
-          <h3 class="text-base md:text-lg font-semibold text-indigo-400 flex items-center gap-2">
+          <h3 class="text-base md:text-lg font-semibold text-agent-500 flex items-center gap-2">
             <MessageCircle class="w-4 h-4 md:w-5 md:h-5" />
             Canales de Comunicacion
           </h3>
-          <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+          <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
             <div class="flex items-center gap-3">
-              <input type="checkbox" class="bg-700" v-model="modalData.channels.whatsapp" id="whatsapp">
-              <label for="whatsapp" class="font-medium text-300 w-full h-full">Whatsapp</label>
+              <input type="checkbox" class="bg-agent-surface-elevated" v-model="modalData.channels.whatsapp" id="whatsapp">
+              <label for="whatsapp" class="font-medium text-agent-text-muted w-full h-full">Whatsapp</label>
             </div>
           </div>
-          <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+          <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
             <div class="flex items-center gap-3">
-              <input type="checkbox" class="bg-700" v-model="modalData.channels.email" id="email">
-              <label for="email" class="font-medium text-300 w-full h-full">Email</label>
+              <input type="checkbox" class="bg-agent-surface-elevated" v-model="modalData.channels.email" id="email">
+              <label for="email" class="font-medium text-agent-text-muted w-full h-full">Email</label>
             </div>
           </div>
-          <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+          <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
             <div class="flex items-center gap-3">
-              <input type="checkbox" class="bg-700" v-model="modalData.channels.sms" id="sms">
-              <label for="sms" class="font-medium text-300 w-full h-full">SMS</label>
+              <input type="checkbox" class="bg-agent-surface-elevated" v-model="modalData.channels.sms" id="sms">
+              <label for="sms" class="font-medium text-agent-text-muted w-full h-full">SMS</label>
             </div>
           </div>
-          <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+          <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
             <div class="flex items-center gap-3">
-              <input type="checkbox" class="bg-700" v-model="modalData.channels.webhook" id="webhook">
-              <label for="webhook" class="font-medium text-300 w-full h-full">Webhook</label>
+              <input type="checkbox" class="bg-agent-surface-elevated" v-model="modalData.channels.webhook" id="webhook">
+              <label for="webhook" class="font-medium text-agent-text-muted w-full h-full">Webhook</label>
             </div>
           </div>
-          <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+          <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
             <div class="flex items-center gap-3">
-              <input type="checkbox" class="bg-700" v-model="modalData.channels.aicustom" id="aicustom">
-              <label for="aicustom" class="font-medium text-300 w-full h-full">AICustom</label>
+              <input type="checkbox" class="bg-agent-surface-elevated" v-model="modalData.channels.aicustom" id="aicustom">
+              <label for="aicustom" class="font-medium text-agent-text-muted w-full h-full">AICustom</label>
             </div>
           </div>
         </div>
         <!-- Funcionalidades por Categoría -->
         <div class="space-y-3 md:space-y-4">
-          <h3 class="text-base md:text-lg font-semibold text-indigo-400 flex items-center gap-2">
+          <h3 class="text-base md:text-lg font-semibold text-agent-500 flex items-center gap-2">
             <Settings class="w-4 h-4 md:w-5 md:h-5" />
             Funcionalidades e Inteligencia
           </h3>
@@ -511,7 +510,7 @@ const statsAgent = computed(() => {
           />
 
           <!-- MARKETING TABS -->
-          <div v-if="activeTab === 'marketing'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-200">
+          <div v-if="activeTab === 'marketing'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-agent-text">
             <FeatureAccordion 
               title="Comunicación Automatizada"
               :enabled="modalData.featureCategories.marketing.comunicacion.enabled"
@@ -522,24 +521,24 @@ const statsAgent = computed(() => {
               <template #default="{ updateFeature, features }">
                 <div class="space-y-4">
                   <!-- WhatsApp -->
-                  <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+                  <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
                     <div class="flex items-center justify-between mb-3">
-                      <span class="font-medium text-100">Campañas WhatsApp/Telegram</span>
+                      <span class="font-medium text-agent-text">Campañas WhatsApp/Telegram</span>
                       <input type="checkbox" :checked="features.whatsapp?.enabled" @change="updateFeature('whatsapp', 'enabled', $event.target.checked)">
                     </div>
-                    <div v-if="features.whatsapp?.enabled" class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4 border-l-2 border-indigo-500/30">
-                      <input type="text" placeholder="API Key" class="bg-800 border-600 rounded px-3 py-1.5 text-sm w-full" :value="features.whatsapp.config.apiKey" @input="updateFeature('whatsapp', 'apiKey', $event.target.value)">
-                      <input type="text" placeholder="Template ID" class="bg-800 border-600 rounded px-3 py-1.5 text-sm w-full" :value="features.whatsapp.config.templateId" @input="updateFeature('whatsapp', 'templateId', $event.target.value)">
+                    <div v-if="features.whatsapp?.enabled" class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4 border-l-2 border-agent-500/30">
+                      <input type="text" placeholder="API Key" class="bg-agent-surface border-agent-border rounded px-3 py-1.5 text-sm w-full" :value="features.whatsapp.config.apiKey" @input="updateFeature('whatsapp', 'apiKey', $event.target.value)">
+                      <input type="text" placeholder="Template ID" class="bg-agent-surface border-agent-border rounded px-3 py-1.5 text-sm w-full" :value="features.whatsapp.config.templateId" @input="updateFeature('whatsapp', 'templateId', $event.target.value)">
                     </div>
                   </div>
                   <!-- Email -->
-                  <div class="p-3 bg-700 rounded-lg border border-slate-600/50">
+                  <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border">
                     <div class="flex items-center justify-between mb-3">
-                      <span class="font-medium text-100">Email Marketing Inteligente</span>
+                      <span class="font-medium text-agent-text">Email Marketing Inteligente</span>
                       <input type="checkbox" :checked="features.email?.enabled" @change="updateFeature('email', 'enabled', $event.target.checked)">
                     </div>
-                    <div v-if="features.email?.enabled" class="pl-4 border-l-2 border-indigo-500/30">
-                      <select class="bg-800 border-600 rounded px-3 py-1.5 text-sm w-full" :value="features.email.config.provider" @change="updateFeature('email', 'provider', $event.target.value)">
+                    <div v-if="features.email?.enabled" class="pl-4 border-l-2 border-agent-500/30">
+                      <select class="bg-agent-surface border-agent-border rounded px-3 py-1.5 text-sm w-full" :value="features.email.config.provider" @change="updateFeature('email', 'provider', $event.target.value)">
                         <option value="sendgrid">SendGrid</option>
                         <option value="aws">AWS SES</option>
                         <option value="mailgun">Mailgun</option>
@@ -559,16 +558,16 @@ const statsAgent = computed(() => {
             >
                <template #default="{ updateFeature, features }">
                 <div class="space-y-4">
-                  <div class="p-3 bg-700 rounded-lg border border-slate-600/50 flex items-center justify-between mb-3">
-                    <span class="font-medium text-100">Recomendación de Productos</span>
+                  <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border flex items-center justify-between mb-3">
+                    <span class="font-medium text-agent-text">Recomendación de Productos</span>
                     <input type="checkbox" :checked="features.recomendaciones?.enabled" @change="updateFeature('recomendaciones', 'enabled', $event.target.checked)">
                   </div>
-                  <div class="p-3 bg-700 rounded-lg border border-slate-600/50 flex items-center justify-between mb-3">
-                    <span class="font-medium text-100">Segmentación de Clientes</span>
+                  <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border flex items-center justify-between mb-3">
+                    <span class="font-medium text-agent-text">Segmentación de Clientes</span>
                     <input type="checkbox" :checked="features.segmentacion?.enabled" @change="updateFeature('segmentacion', 'enabled', $event.target.checked)">
                   </div>
-                  <div class="p-3 bg-700 rounded-lg border border-slate-600/50 flex items-center justify-between mb-3">
-                    <span class="font-medium text-100">Optimización de Precios</span>
+                  <div class="p-3 bg-agent-surface-elevated rounded-lg border border-agent-border flex items-center justify-between mb-3">
+                    <span class="font-medium text-agent-text">Optimización de Precios</span>
                     <input type="checkbox" :checked="features.pricing?.enabled" @change="updateFeature('pricing', 'enabled', $event.target.checked)">
                   </div>
                 </div>
@@ -577,7 +576,7 @@ const statsAgent = computed(() => {
           </div>
 
           <!-- COMERCIAL TABS -->
-          <div v-if="activeTab === 'comercial'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-white">
+          <div v-if="activeTab === 'comercial'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-agent-text">
             <FeatureAccordion 
               title="Atención al Cliente"
               :enabled="modalData.featureCategories.comercial.atencion.enabled"
@@ -587,7 +586,7 @@ const statsAgent = computed(() => {
             >
               <!-- <template #default="{ updateFeature, features }">
                 <div class="space-y-3">
-                   <div class="p-3 bg-700/30 rounded-lg border border-slate-600/50">
+                   <div class="p-3 bg-agent-surface-elevated/30 rounded-lg border border-agent-border">
                     <div class="flex items-center justify-between mb-2">
                       <span class="font-medium">Chatbot Multicanal 24/7</span>
                       <input type="checkbox" :checked="features.chatbot?.enabled" @change="updateFeature('chatbot', 'enabled', $event.target.checked)">
@@ -628,7 +627,7 @@ const statsAgent = computed(() => {
           </div>
 
           <!-- SISTEMAS TABS -->
-           <div v-if="activeTab === 'sistemas'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-white">
+           <div v-if="activeTab === 'sistemas'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-agent-text">
              <FeatureAccordion 
               title="Gestión de Inventario"
               :enabled="modalData.featureCategories.sistemas.inventario.enabled"
@@ -677,7 +676,7 @@ const statsAgent = computed(() => {
            </div>
 
            <!-- SOPORTE TABS -->
-           <div v-if="activeTab === 'soporte'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-white">
+           <div v-if="activeTab === 'soporte'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-agent-text">
              <FeatureAccordion 
               title="Experiencia de Compra"
               :enabled="modalData.featureCategories.ecommerce.compra.enabled"
@@ -687,7 +686,7 @@ const statsAgent = computed(() => {
             >
               <!-- <template #default="{ updateFeature, features }">
                  <div class="space-y-3">
-                   <div class="p-3 bg-700/30 rounded-lg border border-slate-600/50">
+                   <div class="p-3 bg-agent-surface-elevated/30 rounded-lg border border-agent-border">
                     <div class="flex items-center justify-between mb-2">
                       <span class="font-medium">Asistente de Compras IA</span>
                       <input type="checkbox" :checked="features.asistente?.enabled" @change="updateFeature('asistente', 'enabled', $event.target.checked)">
@@ -726,7 +725,7 @@ const statsAgent = computed(() => {
            </div>
         
             <!-- MARKETING TABS -->
-           <div v-if="activeTab === 'marketing'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-white">
+           <div v-if="activeTab === 'marketing'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-agent-text">
              <FeatureAccordion 
               title="Business Intelligence y Reportes"
               :enabled="modalData.featureCategories.analisis.bi.enabled"
@@ -756,9 +755,9 @@ const statsAgent = computed(() => {
         </div>
       </div>
 
-      <div class="p-4 md:p-6 lg:p-8 border-t border-700 bg-800 flex flex-col sm:flex-row justify-end md:gap-4 sticky bottom-0">
+      <div class="p-4 md:p-6 lg:p-8 border-t border-agent-border bg-agent-surface flex flex-col sm:flex-row justify-end md:gap-4 sticky bottom-0">
         <button 
-          class="w-full sm:w-auto px-4 md:px-6 py-2.5 rounded-xl font-medium text-300 hover:text-white hover:bg-700 transition-colors order-2 sm:order-1"
+          class="w-full sm:w-auto px-4 md:px-6 py-2.5 rounded-xl font-medium text-agent-text-muted hover:text-agent-text hover:bg-agent-surface-elevated transition-colors order-2 sm:order-1"
           @click="handleCancel"
         >
           Cancelar
@@ -770,9 +769,8 @@ const statsAgent = computed(() => {
             w-full sm:w-auto
             px-4 md:px-6 py-2.5
             rounded-xl font-medium text-white
-            bg-gradient-to-r from-indigo-500 to-purple-600
-            hover:from-indigo-600 hover:to-purple-700
-            shadow-lg shadow-indigo-500/30
+            bg-agent-500 hover:bg-agent-600
+            shadow-lg shadow-agent-500/25
             transition-all
             order-1 sm:order-2
             disabled:opacity-60 disabled:cursor-not-allowed

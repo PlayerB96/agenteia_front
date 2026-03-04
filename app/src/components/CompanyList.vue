@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { MessageSquare, Mail, Smartphone, Brain, Trash2 } from 'lucide-vue-next';
+import { MessageSquare, Mail, Smartphone, Brain, Trash2, Loader2 } from 'lucide-vue-next';
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -8,7 +8,8 @@ const loading = ref(false)
 const error = ref(null)
 
 const props = defineProps({
-  companies: Array
+  companies: Array,
+  togglingCompanyId: { type: [Number, String], default: null }
 })
 
 const activeCompanies = computed(() =>
@@ -74,41 +75,51 @@ const goEdit = (id) => {
         <div
           v-for="company in activeCompanies"
           :key="company.id"
-          class="bg-agent-surface-elevated border border-agent-border hover:border-agent-500/40 rounded-xl p-4 md:p-6 cursor-pointer transition-colors"
-          @click="goEdit(company.id)"
+          class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
         >
-          <div class="flex flex-col sm:flex-row justify-between items-start gap-3">
-            <div class="flex-1 min-w-0">
-              <h3 class="text-lg md:text-xl font-semibold text-agent-text mb-1">{{ company.razonsocial }}</h3>
-              <p class="text-agent-text-muted text-sm">{{ company.actividad_economica }}</p>
-            </div>
-            <div class="flex items-center gap-3 shrink-0">
-              <span 
-                :class="[
-                  'px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide whitespace-nowrap',
-                  company.active == 1 ? 'bg-agent-500/15 text-agent-500 border border-agent-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'
-                ]"
+          <div
+            @click="goEdit(company.id)"
+            class="flex-1 min-w-0 bg-agent-surface-elevated border border-agent-border hover:border-agent-500/40 rounded-xl p-4 md:p-6 cursor-pointer"
+          >
+            <h3 class="text-lg md:text-xl font-semibold text-agent-text mb-1">{{ company.razonsocial }}</h3>
+            <p class="text-agent-text-muted text-sm">{{ company.actividad_economica }}</p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span 
+              :class="[
+                'px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide whitespace-nowrap',
+                company.active == 1 ? 'bg-agent-500/15 text-agent-500 border border-agent-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'
+              ]"
+            >
+              {{ company.active == 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+            <button
+              @click="togglingCompanyId !== company.id && $emit('toggle-active', company)"
+              :disabled="togglingCompanyId === company.id"
+              class="relative flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 disabled:cursor-wait"
+              :class="[
+                togglingCompanyId === company.id ? 'bg-agent-500/50 justify-center' : company.active ? 'bg-agent-500 justify-end' : 'bg-agent-border justify-start',
+                togglingCompanyId === company.id ? 'cursor-wait' : ''
+              ]"
+              title="Activar / Desactivar"
+            >
+              <span
+                v-if="togglingCompanyId === company.id"
+                class="flex h-4 w-4 items-center justify-center"
               >
-                {{ company.active == 1 ? 'Activo' : 'Inactivo' }}
+                <Loader2 class="h-3 w-3 text-white animate-spin" />
               </span>
-              <button
-                @click.stop="$emit('toggle-active', company)"
-                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-                :class="company.active ? 'bg-agent-500' : 'bg-agent-border'"
-                title="Activar / Desactivar"
-              >
-                <span
-                  class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
-                  :class="company.active ? 'translate-x-6' : 'translate-x-1'"
-                />
-              </button>
-              <button
-                @click.stop="$emit('delete', company)"
-                class="p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
-              >
-                <Trash2 class="w-4 h-4" />
-              </button>
-            </div>
+              <span
+                v-else
+                class="block h-4 w-4 shrink-0 rounded-full bg-white shadow-sm"
+              />
+            </button>
+            <button
+              @click="$emit('delete', company)"
+              class="p-2 rounded-lg text-red-400 hover:bg-red-500/10"
+            >
+              <Trash2 class="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
@@ -121,41 +132,51 @@ const goEdit = (id) => {
         <div
           v-for="company in inactiveCompanies"
           :key="company.id"
-          class="bg-agent-surface-elevated border border-agent-border hover:border-red-500/30 rounded-xl p-4 md:p-6 cursor-pointer transition-colors"
-          @click="goEdit(company.id)"
+          class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
         >
-          <div class="flex flex-col sm:flex-row justify-between items-start gap-3">
-            <div class="flex-1 min-w-0">
-              <h3 class="text-lg md:text-xl font-semibold text-agent-text mb-1">{{ company.razonsocial }}</h3>
-              <p class="text-agent-text-muted text-sm">{{ company.actividad_economica }}</p>
-            </div>
-            <div class="flex items-center gap-3 shrink-0">
-              <span 
-                :class="[
-                  'px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide whitespace-nowrap',
-                  company.active == 1 ? 'bg-agent-500/15 text-agent-500 border border-agent-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'
-                ]"
+          <div
+            @click="goEdit(company.id)"
+            class="flex-1 min-w-0 bg-agent-surface-elevated border border-agent-border hover:border-red-500/30 rounded-xl p-4 md:p-6 cursor-pointer"
+          >
+            <h3 class="text-lg md:text-xl font-semibold text-agent-text mb-1">{{ company.razonsocial }}</h3>
+            <p class="text-agent-text-muted text-sm">{{ company.actividad_economica }}</p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span 
+              :class="[
+                'px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide whitespace-nowrap',
+                company.active == 1 ? 'bg-agent-500/15 text-agent-500 border border-agent-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'
+              ]"
+            >
+              {{ company.active == 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+            <button
+              @click="togglingCompanyId !== company.id && $emit('toggle-active', company)"
+              :disabled="togglingCompanyId === company.id"
+              class="relative flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 disabled:cursor-wait"
+              :class="[
+                togglingCompanyId === company.id ? 'bg-agent-500/50 justify-center' : company.active ? 'bg-agent-500 justify-end' : 'bg-agent-border justify-start',
+                togglingCompanyId === company.id ? 'cursor-wait' : ''
+              ]"
+              title="Activar / Desactivar"
+            >
+              <span
+                v-if="togglingCompanyId === company.id"
+                class="flex h-4 w-4 items-center justify-center"
               >
-                {{ company.active == 1 ? 'Activo' : 'Inactivo' }}
+                <Loader2 class="h-3 w-3 text-white animate-spin" />
               </span>
-              <button
-                @click.stop="$emit('toggle-active', company)"
-                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-                :class="company.active ? 'bg-agent-500' : 'bg-agent-border'"
-                title="Activar / Desactivar"
-              >
-                <span
-                  class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
-                  :class="company.active ? 'translate-x-6' : 'translate-x-1'"
-                />
-              </button>
-              <button
-                @click.stop="$emit('delete', company)"
-                class="p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
-              >
-                <Trash2 class="w-4 h-4" />
-              </button>
-            </div>
+              <span
+                v-else
+                class="block h-4 w-4 shrink-0 rounded-full bg-white shadow-sm"
+              />
+            </button>
+            <button
+              @click="$emit('delete', company)"
+              class="p-2 rounded-lg text-red-400 hover:bg-red-500/10"
+            >
+              <Trash2 class="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

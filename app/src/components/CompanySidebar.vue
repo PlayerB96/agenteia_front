@@ -5,8 +5,10 @@ const props = defineProps({
   currentSubtab: String
 });
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+
+const appVersion = inject('appVersion', 'v1.0')
 const emit = defineEmits(["update:current-view", "update:current-subtab"]);
 const router = useRouter();
 const route = useRoute();
@@ -38,7 +40,8 @@ const menuItems = [
 <template>
   <aside
     :class="[
-      'fixed lg:static inset-y-0 left-0 z-40 w-64 bg-agent-surface border-r border-agent-border transform transition-transform duration-300 ease-out',
+      'flex flex-col w-64 bg-agent-surface border-r border-agent-border flex-shrink-0 transition-transform duration-300 ease-out',
+      'fixed inset-y-0 left-0 z-40 lg:relative lg:translate-x-0',
       mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
     ]"
   >
@@ -76,7 +79,7 @@ const menuItems = [
                 <button
                   @click="() => {
                     emit('update:current-subtab', sub.id);
-                    router.push('/company/chat');
+                    router.push({ name: 'AgentChatSelect', replace: false });
                   }"
                   :class="[
                     'w-full text-left px-3 py-2 rounded-lg transition-all text-sm',
@@ -107,7 +110,7 @@ const menuItems = [
 
       <!-- Footer -->
       <div class="pt-4 border-t border-agent-border">
-        <p class="text-xs text-agent-text-muted text-center font-mono">v1.0</p>
+        <p class="text-xs text-agent-text-muted text-center font-mono">{{ appVersion }}</p>
       </div>
     </div>
   </aside>

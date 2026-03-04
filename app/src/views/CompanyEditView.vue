@@ -1,27 +1,17 @@
 <script setup>  
   import { ref, markRaw, onMounted, watch } from "vue";
-  import {
-    ArrowBigLeftDash,
-    Sun,
-    MoonStar,
-    Menu,
-    X,
-    LogOut,
-  } from "lucide-vue-next";
-  import { useAuth } from "../utils/useAuth";
+  import { ArrowBigLeftDash, Menu, X } from "lucide-vue-next";
+  import Navbar from "../components/Navbar.vue";
   import AdminSidebar from "../components/AdminSidebar.vue";
+  import { adminEditNav } from "../config/adminNav.js";
   import CompanyList from "../components/CompanyList.vue";
   import CompanyForm from "../components/CompanyForm.vue";
   import { fetchCompanyById, updateCompany, createCompany, fetchDashboardCompany } from '../services/companyService'
   import { showSwalAlert } from '../components/SwalAlert.js'
   import { useRouter, useRoute } from 'vue-router'
-  import { inject } from 'vue'
   import { computed } from 'vue'
 
-  const theme = inject('theme')
-  const toggleTheme = inject('toggleTheme')
   const isEdit = computed(() => !!route.params.id)
-  const { user, logout } = useAuth();
   const currentView = ref("companies");
   const companies = ref([])
   const showModal = ref(false);
@@ -52,10 +42,6 @@
     mobileMenuOpen.value = !mobileMenuOpen.value;
   };
 
-  const handleLogout = () => {
-    logout();
-  };
-  
   const goBack = () => {
     router.push('/admin')
   }
@@ -96,68 +82,46 @@
 </script>
 
 <template>
-  <div class="flex min-h-screen font-sans bg-900 text-100">
-    <!-- Mobile Menu Button -->
-    <button
-      @click="toggleMobileMenu"
-      class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-800 border border-700 rounded-lg text-white hover:bg-slate-700 transition-colors"
+  <div class="h-screen flex flex-col overflow-hidden font-display bg-agent-bg text-agent-text">
+    <Navbar
+      :title="isEdit ? 'Editar Empresa' : 'Nueva Empresa'"
+      description="Configura los datos de la empresa"
     >
-      <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
-      <X v-else class="w-6 h-6" />
-    </button>
+      <template #leading>
+        <button
+          @click="goBack"
+          class="p-2.5 bg-agent-surface-elevated border border-agent-border rounded-lg text-agent-text hover:bg-agent-border/50 transition-colors mr-2"
+          title="Volver"
+        >
+          <ArrowBigLeftDash class="w-5 h-5"/>
+        </button>
+        <button
+          @click="toggleMobileMenu"
+          class="lg:hidden p-2.5 bg-agent-surface-elevated border border-agent-border rounded-lg text-agent-text hover:bg-agent-border/50 transition-colors"
+        >
+          <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
+          <X v-else class="w-6 h-6" />
+        </button>
+      </template>
+    </Navbar>
 
-    <!-- Mobile Overlay -->
     <div
       v-if="mobileMenuOpen"
       class="lg:hidden fixed inset-0 bg-black/50 z-30"
       @click="mobileMenuOpen = false"
-    ></div>
-
-    <!-- Sidebar -->
-    <AdminSidebar
-      :current-view="currentView"
-      :mobile-open="mobileMenuOpen"
-      @update:current-view="
-        currentView = $event;
-        mobileMenuOpen = false;
-      "
     />
 
-    <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto pt-16 lg:pt-8">
-      <header class="mb-6 md:mb-8 flex justify-between items-start">
-        <div class="flex items-center gap-3 self-center">
-          <button
-            @click="goBack"
-            class="text-2xl bg-700 rounded-lg px-4 py-2 "
-            title="Volver"
-          >
-            <ArrowBigLeftDash class="h-5 w-5"/>
-          </button>
-          <h1 class="text-2xl font-bold mb-2">
-            {{ isEdit ? 'Editar Empresa' : 'Nueva Empresa' }}
-          </h1>
-        </div>
-        <div class="flex items-center gap-2 self-center">
-          <button
-            @click="toggleTheme"
-            class="px-4 py-2 rounded-lg transition
-                  bg-100
-                  dark:bg-900 text-100"
-            title="Cambiar Tema"
-          >
-            <MoonStar v-if="theme === 'dark'" class="w-5 h-5" />
-            <Sun v-else class="w-5 h-5" />
-          </button>
-          <button
-            @click="handleLogout"
-            class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm"
-          >
-            <LogOut class="w-4 h-4" />
-            <span class="hidden sm:inline">Cerrar Sesión</span>
-          </button>
-        </div>
-      </header>
-      
+    <div class="flex flex-1 min-h-0">
+      <AdminSidebar
+        :current-view="currentView"
+        :mobile-open="mobileMenuOpen"
+        :nav-items="adminEditNav"
+        title="Agenteia"
+        subtitle="Editar Empresa"
+        @update:current-view="currentView = $event; mobileMenuOpen = false"
+      />
+
+      <main class="flex-1 overflow-y-auto min-w-0 p-4 md:p-6 lg:p-8">
       <CompanyForm
         :company="company"
         :dashboard="dashboard"
@@ -165,6 +129,7 @@
         @save="saveCompany"
         @cancel="goBack"
       />
-    </main>
+      </main>
+    </div>
   </div>
 </template>

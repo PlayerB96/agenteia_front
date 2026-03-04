@@ -1,14 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-const goToAgentChat = (agent) => {
-  if (agent && agent.name) {
-    const agentUrl = agent.name.replace(/\s+/g, '_');
-    router.push(`/company/${encodeURIComponent(agentUrl)}`);
-  }
-};
 import { showSwalAlert } from './SwalAlert.js';
 import { Plus, Power, PowerOff, Edit, Trash2 } from "lucide-vue-next";
 import ModalAddAgent from "./ModalAddAgent.vue";
@@ -60,8 +51,7 @@ const reloadAgents = () => {}
       <div
         v-for="agent in agents"
         :key="agent.id"
-        class="bg-agent-surface border border-agent-border rounded-xl p-4 sm:p-6 hover:border-agent-500/40 cursor-pointer transition-all duration-200"
-        @click="goToAgentChat(agent)"
+        class="bg-agent-surface border border-agent-border rounded-xl p-4 sm:p-6"
       >
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
           <div class="flex-1">
@@ -121,7 +111,7 @@ const reloadAgents = () => {}
 
         <div class="flex flex-col sm:flex-row gap-2">
           <button
-            class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text rounded-lg text-sm font-medium border border-agent-border transition-colors"
+            class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text rounded-lg text-sm font-medium border border-agent-border"
             @click.stop="openEdit(agent)"
           >
             <Edit class="w-4 h-4" />
@@ -129,7 +119,7 @@ const reloadAgents = () => {}
           </button>
           <button
             :class="[
-              'flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm border transition-colors',
+              'flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm border',
               agent.active
                 ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border-amber-500/30'
                 : 'bg-agent-500/10 hover:bg-agent-500/20 text-agent-500 border-agent-500/30',
@@ -138,7 +128,7 @@ const reloadAgents = () => {}
             <component :is="agent.active ? PowerOff : Power" class="w-4 h-4" />
           </button>
           <button
-            class="flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-sm transition-colors"
+            class="flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-sm"
           >
             <Trash2 class="w-4 h-4" />
           </button>
@@ -166,7 +156,7 @@ const reloadAgents = () => {}
       v-model="showAddModal"
       :mode="'modalMode'"
       :agent="selectedAgent"
-      @handleSave="reloadAgents"
+      @saved="reloadAgents"
     />
   </div>
 </template>

@@ -8,7 +8,7 @@ defineProps({
 
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30 transition-colors">
+    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30">
       <div class="flex justify-between items-center mb-4">
         <span class="text-agent-text-muted text-sm uppercase tracking-wider font-semibold">Empresas Activas</span>
         <div class="w-10 h-10 rounded-lg bg-agent-500/15 flex items-center justify-center">
@@ -21,7 +21,7 @@ defineProps({
       </div>
     </div>
 
-    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30 transition-colors">
+    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30">
       <div class="flex justify-between items-center mb-4">
         <span class="text-agent-text-muted text-sm uppercase tracking-wider font-semibold">Canales conectados</span>
         <div class="w-10 h-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
@@ -34,7 +34,7 @@ defineProps({
       </div>
     </div>
 
-    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30 transition-colors">
+    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30">
       <div class="flex justify-between items-center mb-4">
         <span class="text-agent-text-muted text-sm uppercase tracking-wider font-semibold">Última interacción</span>
         <div class="w-10 h-10 rounded-lg bg-agent-500/15 flex items-center justify-center">
@@ -47,7 +47,7 @@ defineProps({
       </div>
     </div>
 
-    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30 transition-colors">
+    <div class="bg-agent-surface border border-agent-border rounded-xl p-6 hover:border-agent-500/30">
       <div class="flex justify-between items-center mb-4">
         <span class="text-agent-text-muted text-sm uppercase tracking-wider font-semibold">Conversaciones</span>
         <div class="w-10 h-10 rounded-lg bg-amber-500/15 flex items-center justify-center">

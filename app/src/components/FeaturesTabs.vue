@@ -17,7 +17,7 @@ const tabs = ref([
 </script>
 
 <template>
-  <div class="border-b border-slate-700 mb-6">
+  <div class="border-b border-agent-border mb-6">
     <div class="flex gap-1 overflow-x-auto">
       <button
         v-for="tab in tabs"
@@ -25,8 +25,8 @@ const tabs = ref([
         :class="[
           'flex items-center gap-2 px-4 py-3 font-medium text-sm transition-all whitespace-nowrap',
           activeTab === tab.id
-            ? 'text-indigo-400 border-b-2 border-indigo-500'
-            : 'text-400 hover:text-300'
+            ? 'text-agent-500 border-b-2 border-agent-500'
+            : 'text-agent-text-muted hover:text-agent-text'
         ]"
         @click="emit('update:activeTab', tab.id)"
       >
