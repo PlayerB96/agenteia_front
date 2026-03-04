@@ -1,28 +1,25 @@
 <style scoped>
 .chat-enter-active {
-  transition: all 0.75s ease;
+  transition: all 0.5s ease-out;
 }
-
 .chat-enter-from {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(8px);
 }
-
 .chat-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.3s ease-out;
 }
-
 .chat-leave-to {
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(-4px);
 }
 </style>
 <template>
-  <div class="flex min-h-screen font-sans bg-900 text-100">
+  <div class="flex min-h-screen font-display bg-agent-bg text-agent-text">
 
     <!-- Mobile Menu Button -->
     <button @click="toggleMobileMenu"
-      class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-800 border border-700 rounded-lg text-white hover:bg-700">
+      class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-agent-surface border border-agent-border rounded-lg text-agent-text hover:bg-agent-surface-elevated transition-colors">
       <span v-if="!mobileMenuOpen">☰</span>
       <span v-else>✕</span>
     </button>
@@ -38,30 +35,29 @@
 
     <!-- Main -->
     <main :class="[
-      maximized ? 'lg:p-0 pt-16' : 'flex-1 p-0 md:p-2 lg:p-4 overflow-y-auto pt-16 lg:pt-8'
+      maximized ? 'lg:p-0 pt-16' : 'flex-1 p-0 md:p-4 lg:p-6 overflow-y-auto pt-16 lg:pt-8'
     ]">
       <AgentHeader v-if="!maximized" />
 
       <!-- Selector agente -->
       <div class="mb-4">
         <template v-if="agentName && agentName !== 'chat'">
-          <span class="inline-block bg-700 text-200 px-4 py-2 rounded-lg font-bold text-lg">
-            Chat de agente: {{ agentName.replace(/_/g, ' ') }}
-            {{ connected ? '🟢' : '🔴' }}
+          <span class="inline-flex items-center gap-2 bg-agent-surface border border-agent-border text-agent-text px-4 py-2.5 rounded-lg font-semibold">
+            <span class="w-2 h-2 rounded-full" :class="connected ? 'bg-agent-500' : 'bg-red-500'" />
+            {{ agentName.replace(/_/g, ' ') }}
           </span>
         </template>
 
         <template v-else>
-          <div
-            class="inline-flex flex-wrap items-center gap-2 bg-700 text-200 px-4 py-2 rounded-lg font-bold">
-            <label class="mr-2 text-200">Selecciona agente:</label>
-            <select v-model="selectedAgent" class="bg-700 border border-600 rounded px-2 py-1">
+          <div class="inline-flex flex-wrap items-center gap-2 bg-agent-surface border border-agent-border text-agent-text px-4 py-2.5 rounded-lg">
+            <label class="text-agent-text-muted font-medium">Agente:</label>
+            <select v-model="selectedAgent" class="bg-agent-surface-elevated border border-agent-border rounded-lg px-3 py-2 text-agent-text font-medium focus:outline-none focus:ring-2 focus:ring-agent-500/50">
               <option v-for="agent in agents" :key="agent.name" :value="agent.name">
                 {{ agent.name }}
               </option>
             </select>
             <button @click="goToAgentChat"
-              class="px-3 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600">
+              class="px-4 py-2 bg-agent-500 text-white rounded-lg hover:bg-agent-600 font-semibold transition-colors">
               Ir al chat
             </button>
           </div>
@@ -73,24 +69,24 @@
         <!-- Chat -->
         <section class="flex-1 min-h-0 flex">
           <div ref="chatContainer" :class="[
-            'relative flex flex-col bg-800 border border-700',
+            'relative flex flex-col bg-agent-surface border border-agent-border',
             maximized
               ? 'fixed inset-0 z-[9999] rounded-none w-screen h-screen'
-              : 'w-full max-w mx-auto rounded-xl p-0 md:p-2'
+              : 'w-full max-w mx-auto rounded-xl p-0 md:p-4'
           ]" :style="maximized ? { width: '99vw', height: '99vh' } : {}"
           >
 
 
             <!-- Botón Maximizar -->
             <button @click="toggleMaximize"
-              class="absolute top-3 right-3 z-20 p-2 rounded-lg bg-700 hover:bg-600">
+              class="absolute top-3 right-3 z-20 p-2 rounded-lg bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text transition-colors">
               <component :is="maximized ? Minimize : Maximize2" class="w-5 h-5" />
             </button>
 
             <!-- Opciones superiores -->
-            <div v-if="maximized" class="bg-900 border border-700 rounded-lg">
+            <div v-if="maximized" class="bg-agent-bg border border-agent-border rounded-xl">
               <button @click="showOptions = !showOptions"
-                class="w-full flex items-center justify-between px-4 py-2 font-semibold hover:bg-800">
+                class="w-full flex items-center justify-between px-4 py-3 font-semibold text-agent-text hover:bg-agent-surface transition-colors rounded-xl">
                 Opciones de {{ agentName.replace(/_/g, ' ') }}
                 <span>{{ showOptions ? '▲' : '▼' }}</span>
               </button>
@@ -136,11 +132,11 @@
             </div>
 
             <!-- Mensajes -->
-            <div ref="messagesContainer" class="flex-1 overflow-y-auto p-2 rounded-lg bg-700/10 scrollbar-ag max-w-[100%] max-h-[70vh] scrollbar-ag">
+            <div ref="messagesContainer" class="flex-1 overflow-y-auto p-4 rounded-xl bg-agent-bg/50 scrollbar-ag max-w-[100%] max-h-[70vh]">
               <TransitionGroup
                 name="chat"
                 tag="div"
-                class="flex-1 overflow-y-auto p-2 rounded-lg bg-700/10 scrollbar-thin"
+                class="flex flex-col gap-1"
               >
                 <ChatMessage
                   v-for="(msg, i) in history"
@@ -150,7 +146,7 @@
                   :isDocumentationMode="isDocumentationMode"
                 />
               </TransitionGroup>
-              <div v-if="isProcessing" class="flex items-center gap-2 text-sm text-400 px-2">
+              <div v-if="isProcessing" class="flex items-center gap-2 text-sm text-agent-text-muted px-2 mt-2">
                 <Bot class="w-4 h-4 animate-pulse" />
                 <span>El agente está escribiendo…</span>
               </div>
@@ -182,7 +178,7 @@
                   v-if="selectedAction && key != 'id_action'"
                   class="flex flex-col"
                   >
-                    <label :for="key" class="text-sm text-gray-300">
+                    <label :for="key" class="text-sm text-agent-text-muted font-medium">
                       {{ key }}
                     </label>
                     <input
@@ -190,7 +186,7 @@
                       v-model="actionInputs[key]"
                       :readonly="isDocumentationMode"
                       type="text"
-                      class="bg-700 border border-600 rounded-lg px-3 py-2"
+                      class="bg-agent-surface-elevated border border-agent-border rounded-lg px-3 py-2 text-agent-text placeholder:text-agent-text-muted focus:outline-none focus:ring-2 focus:ring-agent-500/50"
                     />
                   </div>
                 </div>
@@ -202,13 +198,13 @@
                   v-model="input"
                   placeholder="Escribe tu mensaje…"
                   :disabled="isProcessing || selectedAction"
-                  class="w-full bg-700 border border-600 rounded-lg px-4 py-2 focus:outline-none"
+                  class="w-full bg-agent-surface-elevated border border-agent-border rounded-xl px-4 py-3 text-agent-text placeholder:text-agent-text-muted focus:outline-none focus:ring-2 focus:ring-agent-500/50 transition-shadow"
                 />
               </div>
 
               <!-- Botón siempre abajo -->
               <div class="flex justify-end mb-1">
-                <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-lg flex items-center gap-1">
+                <button type="submit" class="px-4 py-2.5 bg-agent-500 text-white rounded-xl flex items-center gap-2 font-semibold hover:bg-agent-600 transition-colors">
                   <Send class="w-4 h-4" />
                   <span class="hidden sm:inline">Enviar</span>
                 </button>
@@ -217,7 +213,7 @@
 
             <!-- Acciones -->
             <button @click="clearHistory"
-              class="inline-flex items-center gap-2 px-3 py-2 bg-700 rounded hover:bg-indigo-500/10">
+              class="inline-flex items-center gap-2 px-3 py-2 bg-agent-surface-elevated border border-agent-border rounded-lg text-agent-text-muted hover:text-agent-500 hover:border-agent-500/30 transition-colors font-medium">
               <MessageCircle class="w-4 h-4 text-indigo-400"/> Nuevo Chat
             </button>
 
@@ -226,9 +222,9 @@
 
         <!-- Aside -->
         <aside v-if="!maximized"
-          class="w-full md:w-[420px] bg-800 border border-700 rounded-xl p-0 md:p-4 flex flex-col gap-8">
+          class="w-full md:w-[420px] bg-agent-surface border border-agent-border rounded-xl p-0 md:p-4 flex flex-col gap-8">
           <div>
-            <h2 class="font-bold mb-4">Opciones de {{ agentName.replace(/_/g, ' ') }}</h2>
+            <h2 class="font-bold mb-4 text-agent-text">Opciones de {{ agentName.replace(/_/g, ' ') }}</h2>
             <ul class="max-h-32 overflow-y-auto space-y-1 text-xs scrollbar-ag">
               <li v-for="(msg, i) in lastChats" :key="i" class="flex gap-1">
                 <component :is="msg.role === 'user' ? User : Bot" class="w-3 h-3" />
@@ -272,7 +268,7 @@
               v-if="!documentoExpirado"
               :href="documentUrl"
               target="_blank"
-              class="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded"
+              class="flex items-center justify-center px-4 py-2.5 bg-agent-500 text-white rounded-lg font-semibold hover:bg-agent-600 transition-colors"
             >
               <Download class="w-4 h-4 mr-2" />
               Descargar documento
@@ -291,17 +287,16 @@
                 v-for="chat in chatHistory"
                 :key="chat.id"
                 @click="loadChat(chat)"
-                class="cursor-pointer p-2 rounded-lg
-                      bg-700 hover:bg-indigo-500/10"
+                class="cursor-pointer p-3 rounded-xl border transition-colors"
                 :class="[
                   chat.id === activeChatId
-                    ? 'bg-indigo-500/20 ring-1 ring-indigo-400'
-                    : 'bg-700 hover:bg-indigo-500/10'
+                    ? 'bg-agent-500/15 border-agent-500/40 text-agent-text'
+                    : 'bg-agent-surface-elevated border-agent-border hover:border-agent-500/30 text-agent-text'
                 ]"
               >
                 <p class="font-medium truncate">{{ chat.title }}</p>
-                <p class="text-xs text-400 flex items-center gap-1">
-                  <MessageCircle class="w-3 h-3 text-indigo-400" />
+                <p class="text-xs text-agent-text-muted flex items-center gap-1">
+                  <MessageCircle class="w-3 h-3 text-agent-500" />
                   {{ new Date(chat.createdAt).toLocaleTimeString() }}
                 </p>
               </li>

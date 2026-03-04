@@ -3,91 +3,141 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --agent-bg: #0f1419;
+    --agent-surface: #161b22;
+    --agent-surface-elevated: #21262d;
+    --agent-border: #30363d;
+    --agent-text: #e6edf3;
+    --agent-text-muted: #8b949e;
+    --agent-primary: #14b8a6;
+    --agent-primary-hover: #0d9488;
+    --agent-accent: #f59e0b;
+  }
+
+  .dark {
+    --agent-bg: #0f1419;
+    --agent-surface: #161b22;
+    --agent-surface-elevated: #21262d;
+    --agent-border: #30363d;
+    --agent-text: #e6edf3;
+    --agent-text-muted: #8b949e;
+    --agent-primary: #14b8a6;
+    --agent-primary-hover: #0d9488;
+    --agent-accent: #f59e0b;
+  }
+
+  :root:not(.dark) {
+    --agent-bg: #f8fafc;
+    --agent-surface: #ffffff;
+    --agent-surface-elevated: #f1f5f9;
+    --agent-border: #e2e8f0;
+    --agent-text: #0f172a;
+    --agent-text-muted: #64748b;
+    --agent-primary: #0d9488;
+    --agent-primary-hover: #0f766e;
+    --agent-accent: #d97706;
+  }
 }
 
 @layer components {
   aside {
-    @apply bg-slate-800 dark:bg-slate-200 dark:text-black;
+    @apply bg-slate-850 dark:bg-agent-surface border-r border-slate-700/50;
   }
 
-  .border-700{
-    @apply border-slate-700 dark:border-slate-300;
+  .border-700 {
+    @apply border-slate-700 dark:border-agent-border;
   }
 
-  .border-600{
-    @apply border-slate-600 dark:border-slate-400;
+  .border-600 {
+    @apply border-slate-600 dark:border-slate-500;
   }
 
-  .text-500{
-    @apply text-slate-500 dark:text-slate-400;
+  .text-500 {
+    @apply text-slate-500 dark:text-agent-text-muted;
   }
 
-  .text-400{
-    @apply text-slate-400 dark:text-slate-500;
+  .text-400 {
+    @apply text-slate-400 dark:text-slate-400;
   }
 
-  .text-300{
-    @apply text-slate-300 dark:text-slate-600;
+  .text-300 {
+    @apply text-slate-300 dark:text-slate-500;
   }
 
-  .text-200{
-    @apply text-slate-200 dark:text-slate-700;
+  .text-200 {
+    @apply text-slate-200 dark:text-slate-300;
   }
 
-  .text-100{
-    @apply text-slate-100 dark:text-slate-800;
+  .text-100 {
+    @apply text-slate-100 dark:text-agent-text;
   }
 
-  .bg-900{
-    @apply bg-slate-900 dark:bg-slate-100;
+  .bg-900 {
+    @apply bg-slate-900 dark:bg-agent-bg;
   }
 
-  .bg-800{
-    @apply bg-slate-800 dark:bg-slate-200;
+  .bg-800 {
+    @apply bg-slate-800 dark:bg-agent-surface;
   }
 
-  .bg-700{
-    @apply bg-slate-700 dark:bg-slate-300;
+  .bg-700 {
+    @apply bg-slate-700 dark:bg-agent-surface-elevated;
   }
 
-  .bg-600{
-    @apply bg-slate-600 dark:bg-slate-400;
+  .bg-600 {
+    @apply bg-slate-600 dark:bg-slate-600;
   }
 
-  .text-900{
-    @apply text-slate-900 dark:text-slate-100;
+  .text-900 {
+    @apply text-slate-900 dark:text-agent-text;
   }
 
-  .bg-200{
-    @apply bg-slate-200 dark:bg-slate-800;
+  .bg-200 {
+    @apply bg-slate-200 dark:bg-agent-surface-elevated;
   }
 
-  .text-2xl{
-    @apply text-white dark:text-black;
+  .text-2xl {
+    @apply text-white dark:text-agent-text;
   }
 
-  .text-3xl{
-    @apply text-white dark:text-black;
+  .text-3xl {
+    @apply text-white dark:text-agent-text;
   }
 
-  .text-emerald-400-ag{
-    @apply text-emerald-400 dark:text-emerald-600;
+  .text-emerald-400-ag {
+    @apply text-agent-500 dark:text-agent-400;
   }
 
-  .bg-emerald-400-ag{
-    @apply bg-emerald-400 dark:bg-emerald-600;
-  }
-  
-  .bg-emerald-600-ag{
-    @apply bg-emerald-600 dark:bg-emerald-400;
+  .bg-emerald-400-ag {
+    @apply bg-agent-500 dark:bg-agent-500;
   }
 
-  .bg-red-600-ag{
-    @apply bg-red-600 dark:bg-red-400;
+  .bg-emerald-600-ag {
+    @apply bg-agent-600 dark:bg-agent-500;
+  }
+
+  .bg-red-600-ag {
+    @apply bg-red-600 dark:bg-red-500;
   }
 
   .scrollbar-ag {
     scrollbar-width: thin;
-    scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
+    scrollbar-color: var(--agent-border) transparent;
+  }
+
+  /* Enterprise card */
+  .card-agent {
+    @apply bg-agent-surface dark:bg-agent-surface border border-agent-border rounded-xl;
+  }
+
+  /* Primary button */
+  .btn-agent-primary {
+    @apply bg-agent-500 hover:bg-agent-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors;
+  }
+
+  /* Secondary / outline */
+  .btn-agent-outline {
+    @apply border border-agent-border hover:border-agent-500/50 text-agent-text hover:text-agent-500 font-medium py-2.5 px-4 rounded-lg transition-colors;
   }
 }

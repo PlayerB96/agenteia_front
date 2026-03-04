@@ -4,7 +4,7 @@
       v-for="action in actions"
       :key="action.id"
       @click="$emit('select', action)"
-      class="px-3 py-1 rounded bg-gray-600 hover:bg-gray-500 text-sm"
+      class="px-4 py-2 rounded-lg text-sm font-medium bg-agent-surface-elevated border border-agent-border text-agent-text hover:border-agent-500/50 hover:text-agent-500 transition-colors"
     >
       {{ action.label }}
     </button>

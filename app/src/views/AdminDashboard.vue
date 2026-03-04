@@ -1,24 +1,12 @@
 <script setup>  
-  import { ref, markRaw, onMounted, watch } from "vue";
-  import {
-    Sun,
-    MoonStar,
-    MessageSquare,
-    Mail,
-    Smartphone,
-    Webhook,
-    Brain,
-    Menu,
-    X,
-    LogOut,
-  } from "lucide-vue-next";
+  import { ref, onMounted } from "vue";
+  import { Sun, MoonStar, Menu, X, LogOut } from "lucide-vue-next";
   import { useAuth } from "../utils/useAuth";
   import AdminSidebar from "../components/AdminSidebar.vue";
   import StatsGrid from "../components/StatsGrid.vue";
   import CompanyList from "../components/CompanyList.vue";
-  import { fetchCompanies, createCompany, updateCompany, deleteCompany, toggleCompany, fetchDashboard } from '../services/companyService'
+  import { fetchCompanies, deleteCompany, toggleCompany, fetchDashboard } from '../services/companyService'
   import { showSwalAlert } from '../components/SwalAlert.js'
-
   import { inject } from 'vue'
 
   const theme = inject('theme')
@@ -27,38 +15,21 @@
   const { user, logout } = useAuth();
   const currentView = ref("companies");
   const companies = ref([])
-  const showModal = ref(false);
-  const selectedCompany = ref(null);
   const mobileMenuOpen = ref(false);
   const stats = ref({})
-
 
   const loadStats = async () => {
     const data = await fetchDashboard()
     if (data) stats.value = data
   }
 
-  // 🔁 Cargar listado
   const loadCompanies = async () => {
     companies.value = await fetchCompanies()
   }
   
   onMounted(() => {
     loadCompanies()
-    //loadStats()
   })
-
-  const openModal = (company = null) => {
-    selectedCompany.value = company;
-    showModal.value = true;
-  };
-
-  const closeModal = () => {
-    showModal.value = false;
-    selectedCompany.value = null;
-  };
-
-  const saving = ref(false)
 
   const removeCompany = async (company) => {
     const confirm = await showSwalAlert({
@@ -74,7 +45,7 @@
 
     try {
       await deleteCompany(company.id)
-      await loadCompanies() // 🔄 refresca listado
+      await loadCompanies()
       showSwalAlert({
         icon: 'success',
         title: 'Eliminado',
@@ -110,63 +81,55 @@
 </script>
 
 <template>
-  <div class="flex min-h-screen font-sans bg-900 text-100">
-    <!-- Mobile Menu Button -->
+  <div class="flex min-h-screen font-display bg-agent-bg text-agent-text">
     <button
       @click="toggleMobileMenu"
-      class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-800 border border-700 rounded-lg text-white hover:bg-slate-700 transition-colors"
+      class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-agent-surface border border-agent-border rounded-lg text-agent-text hover:bg-agent-surface-elevated transition-colors"
     >
       <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
       <X v-else class="w-6 h-6" />
     </button>
 
-    <!-- Mobile Overlay -->
     <div
       v-if="mobileMenuOpen"
       class="lg:hidden fixed inset-0 bg-black/50 z-30"
       @click="mobileMenuOpen = false"
-    ></div>
+    />
 
-    <!-- Sidebar -->
     <AdminSidebar
       :current-view="currentView"
       :mobile-open="mobileMenuOpen"
-      @update:current-view="
-        currentView = $event;
-        mobileMenuOpen = false;
-      "
+      @update:current-view="currentView = $event; mobileMenuOpen = false"
     />
 
     <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto pt-16 lg:pt-8">
-      <header class="mb-6 md:mb-8 flex justify-between items-start">
+      <header class="mb-6 md:mb-8 flex flex-wrap justify-between items-start gap-4">
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold mb-2">
+          <h1 class="text-2xl md:text-3xl font-bold text-agent-text mb-2 tracking-tight">
             Dashboard de Configuración
           </h1>
-          <p class="text-slate-400 text-sm md:text-base">
+          <p class="text-agent-text-muted text-sm md:text-base">
             Gestiona las empresas y sus configuraciones de agentes IA
           </p>
-          <p v-if="user" class="text-slate-500 text-xs mt-1">
-            Bienvenido, {{ user.name || user.email }}
+          <p v-if="user" class="text-agent-text-muted/80 text-xs mt-1 font-mono">
+            {{ user.name || user.email }}
           </p>
         </div>
         <div class="flex items-center gap-2 self-center">
           <button
             @click="toggleTheme"
-            class="px-4 py-2 rounded-lg transition
-                  bg-100
-                  dark:bg-900 text-100"
-            title="Cambiar Tema"
+            class="p-2.5 rounded-lg transition-colors bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text border border-agent-border"
+            title="Cambiar tema"
           >
             <MoonStar v-if="theme === 'dark'" class="w-5 h-5" />
             <Sun v-else class="w-5 h-5" />
           </button>
           <button
             @click="handleLogout"
-            class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm"
+            class="flex items-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm font-medium"
           >
             <LogOut class="w-4 h-4" />
-            <span class="hidden sm:inline">Cerrar Sesión</span>
+            <span class="hidden sm:inline">Cerrar sesión</span>
           </button>
         </div>
       </header>
@@ -174,10 +137,9 @@
       <StatsGrid :stats="stats" />
 
       <CompanyList 
-      :companies="companies" 
-      @open-modal="openModal" 
-      @delete="removeCompany"
-      @toggle-active="toggleCompanyActive" 
+        :companies="companies" 
+        @delete="removeCompany"
+        @toggle-active="toggleCompanyActive" 
       />
     </main>
   </div>

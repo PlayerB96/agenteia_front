@@ -19,31 +19,31 @@ const navItems = ref([
 
 <template>
   <aside :class="[
-    'fixed lg:sticky top-0 left-0 w-72 bg-800 border-r border-700 py-8 flex flex-col h-screen z-40 transition-transform duration-300',
+    'fixed lg:static inset-y-0 left-0 z-40 w-72 bg-agent-surface border-r border-agent-border py-8 flex flex-col h-screen transition-transform duration-300 ease-out',
     mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
   ]">
-
     <div class="px-8 pb-8">
-      <h1 class="text-xl text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
-        <component :is="Settings" class="w-6 h-6 md:w-8 md:h-8 text-indigo-500" />
-        AgentIA
+      <h1 class="text-xl font-bold text-agent-500 tracking-tight flex items-center gap-2">
+        <Settings class="w-6 h-6 md:w-7 md:h-7" />
+        Agenteia
       </h1>
+      <p class="text-xs text-agent-text-muted mt-1 font-medium pl-10">Panel Admin</p>
     </div>
 
-    <nav class="flex-1 px-4 space-y-2 overflow-y-auto">
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
       <div 
         v-for="item in navItems" 
         :key="item.id"
         :class="[
-          'flex items-center gap-3 px-4 py-3.5 rounded-xl cursor-pointer transition-all duration-200',
+          'flex items-center gap-3 px-4 py-3.5 rounded-xl cursor-pointer transition-all font-medium',
           currentView === item.id
-              ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-              : 'text-300 hover:bg-700 hover:text-100',
+            ? 'bg-agent-500/15 text-agent-500 border border-agent-500/30'
+            : 'text-agent-text-muted hover:bg-agent-surface-elevated hover:text-agent-text border border-transparent'
         ]"
         @click="emit('update:currentView', item.id)"
       >
-        <component :is="item.icon" class="w-5 h-5" />
-        <span class="font-medium">{{ item.label }}</span>
+        <component :is="item.icon" class="w-5 h-5 shrink-0" />
+        <span>{{ item.label }}</span>
       </div>
     </nav>
   </aside>

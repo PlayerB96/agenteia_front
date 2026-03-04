@@ -15,7 +15,6 @@ const agents = ref(mockAgents);
 const theme = inject('theme')
 const toggleTheme = inject('toggleTheme')
 
-
 const stats = computed(() => ({
   totalAgents: agents.value.length,
   activeAgents: agents.value.filter((a) => a.active).length,
@@ -33,98 +32,88 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-900 text-100 font-sans">
-    <!-- Mobile Menu Button -->
+  <div class="flex min-h-screen bg-agent-bg text-agent-text font-display">
     <button
       @click="toggleMobileMenu"
-      class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-800 border border-700 rounded-lg text-white hover:bg-700 transition-colors"
+      class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-agent-surface border border-agent-border rounded-lg text-agent-text hover:bg-agent-surface-elevated transition-colors"
     >
       <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
       <X v-else class="w-6 h-6" />
     </button>
 
-    <!-- Mobile Overlay -->
     <div
       v-if="mobileMenuOpen"
       class="lg:hidden fixed inset-0 bg-black/50 z-30"
       @click="mobileMenuOpen = false"
-    ></div>
+    />
 
-    <!-- Sidebar -->
     <CompanySidebar
       :current-view="currentView"
       :mobile-open="mobileMenuOpen"
       :current-subtab="currentSubtab"
-      @update:current-view="
-        currentView = $event;
-        mobileMenuOpen = false;
-      "
+      @update:current-view="currentView = $event; mobileMenuOpen = false"
       @update:current-subtab="currentSubtab = $event"
     />
 
     <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto pt-16 lg:pt-8">
-      <header class="mb-6 md:mb-8 flex justify-between items-start">
+      <header class="mb-6 md:mb-8 flex flex-wrap justify-between items-start gap-4">
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold mb-2">
-            Dashboard Empresarial
+          <h1 class="text-2xl md:text-3xl font-bold text-agent-text mb-2 tracking-tight">
+            Centro de Control
           </h1>
-          <p class="text-400 text-sm md:text-base">
+          <p class="text-agent-text-muted text-sm md:text-base">
             Gestiona tus agentes IA y configuraciones
           </p>
-          <p v-if="user" class="text-500 text-xs mt-1">
+          <p v-if="user" class="text-agent-text-muted/80 text-xs mt-1 font-mono">
             {{ user.name || user.email }}
           </p>
         </div>
         <div class="flex items-center gap-2 self-center">
           <button
             @click="toggleTheme"
-            class="px-4 py-2 rounded-lg transition
-                  bg-100
-                  dark:bg-900 text-100"
-            title="Cambiar Tema"
+            class="p-2.5 rounded-lg transition-colors bg-agent-surface-elevated hover:bg-agent-border/50 text-agent-text-muted hover:text-agent-text border border-agent-border"
+            title="Cambiar tema"
           >
             <MoonStar v-if="theme === 'dark'" class="w-5 h-5" />
             <Sun v-else class="w-5 h-5" />
           </button>
           <button
             @click="handleLogout"
-            class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm"
+            class="flex items-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm font-medium"
           >
             <LogOut class="w-4 h-4" />
-            <span class="hidden sm:inline">Cerrar Sesión</span>
+            <span class="hidden sm:inline">Cerrar sesión</span>
           </button>
         </div>
       </header>
 
-      <!-- Stats Grid -->
       <CompanyStats :stats="stats" />
 
-      <!-- Main Content -->
       <div class="mt-8">
         <AgentConfig v-if="currentView === 'agents'" :agents="agents" />
 
         <div
           v-else-if="currentView === 'users'"
-          class="bg-800/50 border border-700 rounded-xl p-8 text-center"
+          class="bg-agent-surface border border-agent-border rounded-xl p-10 text-center"
         >
-          <Users class="w-16 h-16 mx-auto text-600 mb-4" />
-          <h3 class="text-xl font-semibold text-300 mb-2">
+          <Users class="w-16 h-16 mx-auto text-agent-text-muted mb-4" />
+          <h3 class="text-xl font-semibold text-agent-text mb-2">
             Gestión de Usuarios
           </h3>
-          <p class="text-500">
+          <p class="text-agent-text-muted">
             Próximamente: Invita y gestiona usuarios de tu empresa
           </p>
         </div>
 
         <div
           v-else-if="currentView === 'settings'"
-          class="bg-800/50 border border-700 rounded-xl p-8 text-center"
+          class="bg-agent-surface border border-agent-border rounded-xl p-10 text-center"
         >
-          <Settings class="w-16 h-16 mx-auto text-600 mb-4" />
-          <h3 class="text-xl font-semibold text-300 mb-2">
+          <Settings class="w-16 h-16 mx-auto text-agent-text-muted mb-4" />
+          <h3 class="text-xl font-semibold text-agent-text mb-2">
             Configuración
           </h3>
-          <p class="text-500">
+          <p class="text-agent-text-muted">
             Próximamente: Configura tu empresa y preferencias
           </p>
         </div>

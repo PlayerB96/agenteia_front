@@ -3,7 +3,7 @@ import { watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../utils/useAuth";
 
-const { isAuthenticated, isLoading, error, userRole } = useAuth();
+const { isAuthenticated, isLoading, error, userRole, user } = useAuth();
 const router = useRouter();
 
 const handleRedirect = () => {
@@ -35,7 +35,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-900 flex items-center justify-center">
+  <div class="min-h-screen bg-agent-bg flex items-center justify-center font-display">
     <div class="text-center">
       <div
         v-if="error"
@@ -45,7 +45,7 @@ onMounted(() => {
         <p class="text-red-300 text-sm">{{ error.message }}</p>
         <button
           @click="router.push('/login')"
-          class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded transition-colors"
+          class="mt-4 px-4 py-2.5 bg-agent-500 hover:bg-agent-600 text-white rounded-lg font-semibold transition-colors"
         >
           Volver al Login
         </button>
@@ -58,13 +58,12 @@ onMounted(() => {
         <h2 class="text-2xl font-bold text-white mb-2">
           Verificando sesión...
         </h2>
-        <p class="text-slate-400 mb-4">Esperando 5 segundos para debug...</p>
+        <p class="text-agent-text-muted mb-4">Verificando credenciales…</p>
 
-        <!-- DEBUG INFO -->
         <div
-          class="mt-8 p-4 bg-slate-800 rounded text-left text-xs font-mono text-slate-400 overflow-auto max-w-lg max-h-60 mx-auto border border-slate-700"
+          class="mt-8 p-4 bg-agent-surface rounded-xl text-left text-xs font-mono text-agent-text-muted overflow-auto max-w-lg max-h-60 mx-auto border border-agent-border"
         >
-          <p class="font-bold text-slate-300 mb-2">
+          <p class="font-bold text-agent-text mb-2">
             Debug Info (Auth0 User Data):
           </p>
           <pre>{{ JSON.stringify(user, null, 2) }}</pre>
