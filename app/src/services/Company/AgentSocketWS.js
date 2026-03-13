@@ -33,6 +33,7 @@ export class AgentSocketWS {
           text: data.message,
           intent: data.intent,
           step: data.step,
+          error: data.ui_state === 'error'
         })
       }
 

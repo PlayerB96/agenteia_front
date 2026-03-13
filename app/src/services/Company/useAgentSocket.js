@@ -157,10 +157,15 @@ export function useAgentSocket({ token, codeUser, fullName }) {
       }
 
       const totalSeconds = Math.floor(remainingMs / 1000)
-      const minutes = Math.floor(totalSeconds / 60)
+
+      const hours = Math.floor(totalSeconds / 3600)
+      const minutes = Math.floor((totalSeconds % 3600) / 60)
       const seconds = totalSeconds % 60
 
-      tiempoRestante.value = `${minutes}:${seconds.toString().padStart(2, '0')}`
+      const pad = (n) => String(n).padStart(2, '0')
+
+      tiempoRestante.value = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+
     }, 1000)
   }
   

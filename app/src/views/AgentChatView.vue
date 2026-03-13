@@ -69,7 +69,7 @@
           <div ref="chatContainer" :class="[
             'relative flex flex-col bg-agent-surface border border-agent-border flex-1 min-h-0',
             maximized
-              ? 'fixed inset-0 z-[9999] rounded-none w-screen h-screen'
+              ? 'fixed inset-0 z-[9] rounded-none w-screen h-screen'
               : 'w-full rounded-lg p-2 md:p-3'
           ]" :style="maximized ? { width: '99vw', height: '99vh' } : {}"
           >
@@ -256,7 +256,8 @@
           </div>
           <div v-if="mostrarDocumento" class="mt-1">
             <small v-if="!documentoExpirado" class="flex items-center justify-center mb-1.5 text-xs font-medium">
-              <Timer class="w-3 h-3 inline mr-0.5" /> {{ tiempoRestante }}
+              <Timer class="w-3 h-3 inline mr-0.5" />
+              {{ tiempoRestante }}
             </small>
 
             <a
@@ -407,42 +408,6 @@ watch(
   () => [maximized.value, isProcessing.value, messages.value],
   ([maximizedVal, isProcessingVal, newMessages]) => {
     document.body.style.overflowX = maximizedVal ? 'hidden' : 'auto'
-
-
-    /*if (isProcessingVal) {
-      currentStep.value = 0
-
-      setTimeout(() => {
-        steps.value[0].status = 'done'
-        steps.value[1].status = 'active'
-      }, 300)
-
-      setTimeout(() => {
-        steps.value[1].status = 'done'
-        steps.value[2].status = 'active'
-      }, 700)
-
-      setTimeout(() => {
-        steps.value[2].status = 'done'
-        steps.value[3].status = 'active'
-      }, 1100)
-
-      setTimeout(() => {
-        steps.value[3].status = 'done'
-        steps.value[4].status = 'active'
-      }, 1500)
-
-      setTimeout(() => {
-        steps.value[4].status = 'done'
-        currentStep.value = 5
-      }, 1900)
-
-      //regresar todo a pending
-      setTimeout(() => {
-        steps.value.forEach(s => s.status = 'pending')
-        currentStep.value = 0
-      }, 5000)
-    }*/
 
     newMessages.forEach(msg => {
       history.value.push(msg)
